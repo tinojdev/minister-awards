@@ -2,6 +2,8 @@
 
 ## Installation
 
+- Clone the project using `git clone git@github.com:tinojdev/minister-awards.git`
+
 ### Frontend
 
 1. Go to the frontend folder
