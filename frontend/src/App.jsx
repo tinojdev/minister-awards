@@ -4,33 +4,34 @@ import Home from "/src/scenes/home";
 import Wait from "/src/scenes/waiting_page";
 import Leaderboard from "/src/scenes/leaderboard";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import CategoriesScene from "./scenes/categories";
 import Layout from "/src/scenes/layout";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "/src/theme";
 
 function App() {
-  let countDownDate = new Date("Dec 6, 2023 12:00:00").getTime();
-  const now = new Date().getTime();
-  const initialHasVoteBegun = countDownDate - now <= 0;
+	let countDownDate = new Date("Dec 6, 2023 12:00:00").getTime();
+	const now = new Date().getTime();
+	const initialHasVoteBegun = countDownDate - now <= 0;
 
-  const [hasVoteBegun, setHasVoteBegun] = useState(initialHasVoteBegun);
+	const [hasVoteBegun, setHasVoteBegun] = useState(initialHasVoteBegun);
 
-  console.log("🚀 ~ App ~ hasVoteBegun:", hasVoteBegun);
+	console.log("🚀 ~ App ~ hasVoteBegun:", hasVoteBegun);
 
-  useEffect(() => {
-    if (!hasVoteBegun) {
-      const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
-        if (distance <= 0) {
-          setHasVoteBegun(true);
-          clearInterval(interval);
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [hasVoteBegun, countDownDate]);
+	useEffect(() => {
+		if (!hasVoteBegun) {
+			const interval = setInterval(() => {
+				const now = new Date().getTime();
+				const distance = countDownDate - now;
+				if (distance <= 0) {
+					setHasVoteBegun(true);
+					clearInterval(interval);
+				}
+			}, 1000);
+			return () => clearInterval(interval);
+		}
+	}, [hasVoteBegun, countDownDate]);
 
   const theme = createTheme(themeSettings);
 
@@ -48,6 +49,7 @@ function App() {
               />
               <Route path="/waiting_page" element={<Wait />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/categories" element={<CategoriesScene />} />
             </Route>
           </Routes>
         </ThemeProvider>
