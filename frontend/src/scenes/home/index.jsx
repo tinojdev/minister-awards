@@ -5,21 +5,25 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Header from "@/components/Header";
 import Test from "@/components/Test";
+import TopUsersTable from "@/components/TopUsers";
 
 const Home = () => {
-	const { data, error, isLoading } = useGetNominationsQuery();
+  const { data, error, isLoading } = useGetNominationsQuery();
 
-	if (isLoading) {
-		return <Box></Box>;
-	} else {
-		return (
-			<Box padding="2rem">
-				<Test title={"Ali"} />
-				<Test title={"Mali"} />
-				<Test title={"Pali"} />
-			</Box>
-		);
-	}
+  if (isLoading) {
+    return <Box></Box>;
+  } else {
+    return (
+      <>
+        {TopUsersTable()}
+        <Box padding="2rem">
+          <Test title={"Ali"} />
+          <Test title={"Mali"} />
+          <Test title={"Pali"} />
+        </Box>
+      </>
+    );
+  }
 };
 
 export default Home;
