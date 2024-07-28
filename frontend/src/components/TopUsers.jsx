@@ -4,20 +4,38 @@ import santeriKuva from "@/assets/santeri.jfif";
 import aliKuva from "@/assets/ali.png";
 import tinoKuva from "@/assets/tino.jpg";
 import vainoKuva from "@/assets/vaino.png";
+import { Margin } from "@mui/icons-material";
 
-const divStyle = {
-  color: "white",
-  width: "200px",
-  height: "200px",
-  backgroundColor: "DodgerBlue",
-  padding: "10px",
+const tableStyle = {
+  color: "black",
   fontFamily: "Arial",
 };
 
+const tdStyleName = {
+  width: "75px",
+};
+
+const trStyle = {
+  borderBottom: "1px solid black",
+};
+
+const tdStyle = {
+  padding: "4px",
+};
+
 const picStyle = {
-  width: "35px",
-  height: "30px",
+  width: "40px",
+  height: "35px",
   borderRadius: "50%",
+};
+
+const buttonStyle = {
+  marginTop: "10px",
+  cursor: "pointer",
+  backgroundColor: "#cc9f00",
+  color: "white",
+  border: "none",
+  borderRadius: "5px",
 };
 
 const TopUsersTable = () => {
@@ -67,26 +85,27 @@ const TopUsersTable = () => {
       id: 10,
       picture: vainoKuva,
       name: "Väinö",
-      score: -40,
+      score: 0,
     },
   ];
 
   return (
-    <div style={divStyle}>
-      <table>
+    <div>
+      <h2>Top scores</h2>
+      <table style={tableStyle}>
         <tbody>
           {users.slice(0, showAll ? users.length : 3).map((users) => (
-            <tr key={users.id}>
-              <td>
+            <tr style={trStyle} key={users.id}>
+              <td style={tdStyle}>
                 <img style={picStyle} src={users.picture} alt={users.name} />
               </td>
-              <td>{users.name}</td>
-              <td>{users.score}</td>
+              <td style={tdStyleName}>{users.name}</td>
+              <td style={tdStyle}>{users.score}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={() => setShowAll(!showAll)}>
+      <button style={buttonStyle} onClick={() => setShowAll(!showAll)}>
         {showAll ? "^" : "..."}
       </button>
     </div>

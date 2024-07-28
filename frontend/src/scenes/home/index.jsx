@@ -58,16 +58,23 @@ const Home = () => {
   } else {
     return (
       <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
-        <Box maxWidth={1000} margin="0 auto">
-          {carousels.map((carousel) => (
-            <Category
-              key={carousel.id}
-              id={carousel.id}
-              items={carousel.items}
-              selectedId={selections[carousel.id]}
-              onSelectionChange={handleSelectionChange}
-            />
-          ))}
+        <Box
+          sx={{
+            display: "flex",
+          }}
+        >
+          <Box maxWidth={1000} margin="0 auto">
+            {carousels.map((carousel) => (
+              <Category
+                key={carousel.id}
+                id={carousel.id}
+                items={carousel.items}
+                selectedId={selections[carousel.id]}
+                onSelectionChange={handleSelectionChange}
+              />
+            ))}
+          </Box>
+          <TopUsersTable />
         </Box>
       </Box>
     );
