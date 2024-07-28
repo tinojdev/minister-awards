@@ -1,27 +1,75 @@
 import React from "react";
-import { Box, Skeleton } from "@mui/material";
+import { Box, Skeleton, useTheme } from "@mui/material";
 import { useGetNominationsQuery } from "@/state/api";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Header from "@/components/Header";
 import Test from "@/components/Test";
+import Category from "@/components/Category";
+import { useState } from "react";
 import TopUsersTable from "@/components/TopUsers";
 
 const Home = () => {
-  const { data, error, isLoading } = useGetNominationsQuery();
+  let { data, error, isLoading } = useGetNominationsQuery();
+  const [selections, setSelections] = useState({});
+  console.log("🚀 ~ Home ~ selections:", selections);
+  const theme = useTheme();
+
+  const handleSelectionChange = (carouselId, itemId) => {
+    setSelections((prevSelections) => ({
+      ...prevSelections,
+      [carouselId]: itemId,
+    }));
+  };
+
+  const carousels = [
+    {
+      id: "Vuoden Taide",
+      items: [
+        { id: 1, name: "Collage", image: "/assets/collage.png" },
+        { id: 2, name: "Hazard", image: "/assets/hazard.png" },
+        { id: 3, name: "Oni Red", image: "/assets/oni_red.png" },
+        { id: 4, name: "The Dry Eye", image: "/assets/thedryeye.png" },
+        { id: 5, name: "Whoops", image: "/assets/whoops.png" },
+      ],
+    },
+    {
+      id: "Vuoden Poster",
+      items: [
+        { id: 1, name: "Albert Roschier", image: "/assets/albertroschier.png" },
+        { id: 2, name: "Fucking Dead", image: "/assets/fd.png" },
+        { id: 3, name: "Launch", image: "/assets/launch.png" },
+        { id: 4, name: "Smile!", image: "/assets/smile.png" },
+        { id: 5, name: "No Thanks", image: "/assets/thanks.png" },
+      ],
+    },
+  ];
 
   if (isLoading) {
-    return <Box></Box>;
+    return (
+      <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
+        <Box maxWidth={1000} margin="0 auto">
+          <Test />
+          <Test />
+          <Test />
+        </Box>
+      </Box>
+    );
   } else {
     return (
-      <>
-        {TopUsersTable()}
-        <Box padding="2rem">
-          <Test title={"Ali"} />
-          <Test title={"Mali"} />
-          <Test title={"Pali"} />
+      <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
+        <Box maxWidth={1000} margin="0 auto">
+          {carousels.map((carousel) => (
+            <Category
+              key={carousel.id}
+              id={carousel.id}
+              items={carousel.items}
+              selectedId={selections[carousel.id]}
+              onSelectionChange={handleSelectionChange}
+            />
+          ))}
         </Box>
-      </>
+      </Box>
     );
   }
 };

@@ -5,6 +5,10 @@ import Wait from "/src/scenes/waiting_page";
 import Leaderboard from "/src/scenes/leaderboard";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import CategoriesScene from "./scenes/categories";
+import Layout from "/src/scenes/layout";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { themeSettings } from "/src/theme";
 
 function App() {
   let countDownDate = new Date("Dec 6, 2023 12:00:00").getTime();
@@ -29,20 +33,32 @@ function App() {
     }
   }, [hasVoteBegun, countDownDate]);
 
+  const theme = createTheme(themeSettings);
+
   return (
     <div className="app">
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              hasVoteBegun ? <Home /> : <Navigate to="/waiting_page" replace />
-            }
-          />
-          <Route path="/waiting_page" element={<Wait />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/categories" element={<CategoriesScene />} />
-        </Routes>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route
+                path="/home"
+                element={
+                  hasVoteBegun ? (
+                    <Home />
+                  ) : (
+                    <Navigate to="/waiting_page" replace />
+                  )
+                }
+              />
+              <Route path="/waiting_page" element={<Wait />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/categories" element={<CategoriesScene />} />
+            </Route>
+          </Routes>
+        </ThemeProvider>
       </BrowserRouter>
     </div>
   );

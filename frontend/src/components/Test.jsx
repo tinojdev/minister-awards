@@ -1,9 +1,10 @@
 import React from 'react'
 import { Box, Skeleton } from "@mui/material"
 import { useGetNominationsQuery } from '@/state/api';
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 import Header from '@/components/Header';
+import CarouselItem from './CarouselItem';
 
 const responsive = {
     superLargeDesktop: {
@@ -25,32 +26,21 @@ const responsive = {
     }
 };
 
-const Test = ({title}) => {
+const Test = ({ title }) => {
     return (
-        <Box >
-            <Box display="flex" alignItems="start">
-                <Header title={title} />
+        <Box marginBottom="2rem" >
+            <Box display="flex" alignItems="start" marginBottom="0.5rem">
+                <Skeleton variant="text" width={250} sx={{ fontSize: '3rem' }} />
             </Box>
-            <Carousel responsive={responsive} >
-                <Box width={300} height={500}>
-                    <Skeleton width="100%" height="100%" />
-                </Box>
-                <Box>
-                    <Skeleton width={300} height={500} />
-                </Box>
-                <Box>
-                    <Skeleton width={300} height={500} />
-                </Box>
-                <Box>
-                    <Skeleton width={300} height={500} />
-                </Box>
-                <Box>
-                    <Skeleton width={300} height={500} />
-                </Box>
-                <Box>
-                    <Skeleton width={300} height={500} />
-                </Box>
-            </Carousel>
+            <Box>
+                <Carousel responsive={responsive}>
+                    <CarouselItem />
+                    <CarouselItem />
+                    <CarouselItem />
+                    <CarouselItem />
+                    <CarouselItem />
+                </Carousel>
+            </Box>
         </Box>
     )
 }
