@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Skeleton, useTheme } from "@mui/material";
+import { Box, Skeleton, useTheme, useMediaQuery } from "@mui/material";
 import { useGetNominationsQuery } from "@/state/api";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -14,6 +14,7 @@ const Home = () => {
   const [selections, setSelections] = useState({});
   console.log("🚀 ~ Home ~ selections:", selections);
   const theme = useTheme();
+  const isNonMobile = useMediaQuery("(min-width: 600px)");
 
   const handleSelectionChange = (carouselId, itemId) => {
     setSelections((prevSelections) => ({
@@ -61,6 +62,7 @@ const Home = () => {
         <Box
           sx={{
             display: "flex",
+            flexDirection: isNonMobile ? "row" : "column",
           }}
         >
           <Box maxWidth={1000} margin="0 auto">
