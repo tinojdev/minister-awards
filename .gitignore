@@ -1,6 +1,9 @@
 venv
-*.env
+
 .env
+.env.test
+.env*.local
+
 node_modules
 __pycache__
 *.pyc
