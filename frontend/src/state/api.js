@@ -7,15 +7,13 @@ export const api = createApi({
 	reducerPath: "adminApi",
 	tagTypes: ["User"],
 	endpoints: (build) => ({
-		getNominations: build.query({
-			query: () => "nominations",
-			providesTags: ["Nominations"],
+		getNominationsByCategory: build.query({
+			query: (categoryId) => `categories/${categoryId}/nominations/`,
 		}),
 		getCategories: build.query({
-			query: () => "categories",
-			providesTags: ["Categories"],
+			query: () => "categories/",
 		}),
 	}),
 });
 
-export const { useGetNominationsQuery, useGetCategoriesQuery } = api;
+export const { useGetNominationsByCategoryQuery, useGetCategoriesQuery } = api;

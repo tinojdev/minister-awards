@@ -18,4 +18,9 @@
 3. Install dependancies: `pip install -r requirements.txt`
 4. Go to the backend folder
 5. Run `python manage.py migrate`
-6. Run `python manage.py runserver`
+6. Run `python manage.py createsuperuser`
+   - Follow the steps to create your superuser
+7. Run `python manage.py runserver`
+8. Login with the superuser at: `http://localhost:8000/api-auth/login`
+
+- You can now access the backend at http://localhost:8000/api/ and http://localhost:8000/admin/

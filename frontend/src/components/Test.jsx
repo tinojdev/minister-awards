@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Skeleton } from "@mui/material"
-import { useGetNominationsQuery } from '@/state/api';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Header from '@/components/Header';
