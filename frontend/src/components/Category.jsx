@@ -26,7 +26,7 @@ const responsive = {
 	},
 };
 
-const Category = ({ id, items, selectedId, onSelectionChange }) => {
+const Category = ({ id, nominations, selectedId, onSelectionChange }) => {
 	console.log("🚀 ~ Category ~ selectedId:", selectedId);
 
 	const handleCheckboxChange = (itemId) => {
@@ -40,11 +40,11 @@ const Category = ({ id, items, selectedId, onSelectionChange }) => {
 			</Box>
 			<Box>
 				<Carousel responsive={responsive}>
-					{items.map((item) => (
+					{nominations.map((nomination) => (
 						<CarouselItem
-							key={item.id}
-							item={item}
-							isSelected={selectedId === item.id}
+							key={nomination.id}
+							nomination={nomination}
+							isSelected={selectedId === nomination.id}
 							onCheckboxChange={handleCheckboxChange}
 						/>
 					))}

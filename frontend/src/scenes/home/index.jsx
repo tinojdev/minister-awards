@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Skeleton, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Skeleton, useTheme, useMediaQuery, Typography } from "@mui/material";
 import { useGetCategoriesQuery } from "@/state/api";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -12,6 +12,7 @@ import Wait from "../waiting_page";
 
 const Home = () => {
 	let { data, error, isLoading } = useGetCategoriesQuery();
+
 	const [selections, setSelections] = useState({});
 	console.log("🚀 ~ Home ~ selections:", selections);
 	const theme = useTheme();
@@ -27,7 +28,7 @@ const Home = () => {
 	const carousels = [
 		{
 			id: "Vuoden Taide",
-			items: [
+			nominations: [
 				{ id: 1, name: "Collage", image: "/assets/collage.png" },
 				{ id: 2, name: "Hazard", image: "/assets/hazard.png" },
 				{ id: 3, name: "Oni Red", image: "/assets/oni_red.png" },
@@ -37,7 +38,7 @@ const Home = () => {
 		},
 		{
 			id: "Vuoden Poster",
-			items: [
+			nominations: [
 				{ id: 1, name: "Albert Roschier", image: "/assets/albertroschier.png" },
 				{ id: 2, name: "Fucking Dead", image: "/assets/fd.png" },
 				{ id: 3, name: "Launch", image: "/assets/launch.png" },
@@ -57,32 +58,45 @@ const Home = () => {
 				</Box>
 			</Box>
 		);
-	} else {
+	}
+
+	if (error) {
 		return (
-			<Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
-				<Wait />
-				<Box
-					sx={{
-						display: "flex",
-						flexDirection: isNonMobile ? "row" : "column",
-					}}
-				>
-					<Box maxWidth={1000} margin="0 auto">
-						{carousels.map((carousel) => (
-							<Category
-								key={carousel.id}
-								id={carousel.id}
-								items={carousel.items}
-								selectedId={selections[carousel.id]}
-								onSelectionChange={handleSelectionChange}
-							/>
-						))}
-					</Box>
-					<TopUsersTable />
-				</Box>
+			<Box
+				padding="2rem"
+				sx={{
+					backgroundColor: theme.palette.primary[0],
+				}}
+			>
+				<Typography variant="h3">{error.status}</Typography>
+				<Typography variant="body2">{error.error}</Typography>
 			</Box>
 		);
 	}
+	return (
+		<Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
+			<Wait />
+			<Box
+				sx={{
+					display: "flex",
+					flexDirection: isNonMobile ? "row" : "column",
+				}}
+			>
+				<Box maxWidth={1000} margin="0 auto">
+					{data.map((category) => (
+						<Category
+							key={category.id}
+							id={category.id}
+							nominations={category.nominations}
+							selectedId={selections[category.id]}
+							onSelectionChange={handleSelectionChange}
+						/>
+					))}
+				</Box>
+				<TopUsersTable />
+			</Box>
+		</Box>
+	);
 };
 
 export default Home;
