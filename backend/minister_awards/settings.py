@@ -10,23 +10,42 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".." / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@=*n@^-ig&gykh_05hwok#=40bi+jwf%=7a!xv7a0o(9#r_@&i"
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-@=*n@^-ig&gykh_05hwok#=40bi+jwf%=7a!xv7a0o(9#r_@&i",
+)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", None)
+if ALLOWED_HOSTS is not None:
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(",")
+else:
+    ALLOWED_HOSTS = []
 
+CORS_ORIGIN_ALLOW_ALL = (
+    os.getenv("DJANGO_CORS_ORIGIN_ALLOW_ALL", "false").lower() == "true"
+)
+
+MEDIA_ROOT = os.getenv("DJANGO_MEDIA_ROOT", None) or BASE_DIR / "media"
+STATIC_ROOT = os.getenv("DJANGO_STATIC_ROOT", None) or BASE_DIR / "static"
 
 # Application definition
 
@@ -111,8 +130,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ["*"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -125,14 +142,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+MEDIA_URL = "media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
