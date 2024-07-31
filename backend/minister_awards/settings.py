@@ -44,6 +44,8 @@ CORS_ORIGIN_ALLOW_ALL = (
     os.getenv("DJANGO_CORS_ORIGIN_ALLOW_ALL", "false").lower() == "true"
 )
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 MEDIA_ROOT = os.getenv("DJANGO_MEDIA_ROOT", None) or BASE_DIR / "media"
 STATIC_ROOT = os.getenv("DJANGO_STATIC_ROOT", None) or BASE_DIR / "static"
 
