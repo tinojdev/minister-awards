@@ -26,7 +26,7 @@ const responsive = {
 	},
 };
 
-const Category = ({ id, nominations, selectedId, onSelectionChange }) => {
+const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
 	console.log("🚀 ~ Category ~ selectedId:", selectedId);
 
 	const handleCheckboxChange = (itemId) => {
@@ -36,7 +36,7 @@ const Category = ({ id, nominations, selectedId, onSelectionChange }) => {
 	return (
 		<Box marginBottom="2rem">
 			<Box display="flex" alignItems="start" marginBottom="0.5rem">
-				<Header title={id} />
+				<Header title={name} />
 			</Box>
 			<Box>
 				<Carousel responsive={responsive}>

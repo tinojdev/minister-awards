@@ -87,6 +87,7 @@ const Home = () => {
 						<Category
 							key={category.id}
 							id={category.id}
+							name={category.name}
 							nominations={category.nominations}
 							selectedId={selections[category.id]}
 							onSelectionChange={handleSelectionChange}

@@ -17,6 +17,7 @@ const CarouselItem = ({ nomination, isSelected, onCheckboxChange }) => {
 	const handleChange = () => {
 		onCheckboxChange(nomination.id);
 	};
+	console.log(nomination.image);
 	const nominationImgSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${nomination.image}`;
 
 	return (
