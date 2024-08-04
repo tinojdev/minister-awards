@@ -7,12 +7,21 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default defineConfig({
-	envDir: "../",
-	plugins: [react()],
-	resolve: {
-		alias: {
-			"@": resolve(__dirname, "src"),
+export default defineConfig(() => {
+	// eslint-disable-next-line no-undef
+	const VITE_BUILD_DIR = process.env.VITE_BUILD_DIR;
+
+	return {
+		envDir: "../",
+		plugins: [react()],
+		resolve: {
+			alias: {
+				"@": resolve(__dirname, "src"),
+			},
 		},
-	},
+		build: {
+			outDir: VITE_BUILD_DIR ?? "../dist",
+			emptyOutDir: true,
+		},
+	};
 });
