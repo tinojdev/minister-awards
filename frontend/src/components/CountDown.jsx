@@ -1,58 +1,128 @@
+import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
+
+const firstEndDate = new Date(import.meta.env.VITE_START_DATE).getTime();
+const secondEndDate = new Date(import.meta.env.VITE_END_DATE).getTime();
+
 function CountDown() {
-	// Set the date we're counting down to
-	let countDownDate = new Date(import.meta.env.VITE_START_DATE).getTime();
-	const [countDownString, setCountDownString] = useState("");
-	const [hasVoteBegun, setHasVoteBegun] = useState(false);
+  const [countDownString, setCountDownString] = useState("");
+  const [currentEndDate, setCurrentEndDate] = useState(firstEndDate);
+  const [countdownText, setCountdownText] = useState("Äänestys alkaa:");
 
-	function checkInterval() {
-		// Get today's date and time
-		let now = new Date().getTime();
+  function checkInterval() {
+    let now = new Date().getTime();
+    let distance = currentEndDate - now;
 
-		// Find the distance between now and the count down date
-		let distance = countDownDate - now;
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    let hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-		// Time calculations for days, hours, minutes and seconds
-		let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-		let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    setCountDownString(`${days}d ${hours}h ${minutes}m ${seconds}s`);
 
-		// Output the result in an element with id="demo"
-		setCountDownString(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+    if (distance <= 0) {
+      if (currentEndDate === firstEndDate) {
+        setCurrentEndDate(secondEndDate);
+        setCountdownText("Äänestys loppuu:");
+      } else {
+        setCountdownText("Tilanne on vittu!");
 
-		// If the count down is over, write some text
-		if (distance < 0) {
-			setHasVoteBegun(true);
-		}
-	}
+        setCountDownString("Abdu on vuoden ministeri!!!");
+      }
+    }
+  }
 
-	// Update the count down every 1 second
-	useEffect(() => {
-		if (hasVoteBegun === true) {
-			return;
-		}
-		checkInterval();
-		let x = setInterval(function () {
-			checkInterval();
-		}, 1000);
-		return () => clearInterval(x);
-	}, [hasVoteBegun]);
-	if (hasVoteBegun != true) {
-		return (
-			<div>
-				<p className="countDownString">Äänestys alkaa</p>
-				<br></br>
-				<p className="countDownString"> {countDownString}</p>
-			</div>
-		);
-	} else {
-		return (
-			<div>
-				<p>Äänestys on alkanut</p>
-			</div>
-		);
-	}
+  useEffect(() => {
+    checkInterval();
+    let interval = setInterval(checkInterval, 1000);
+    return () => clearInterval(interval);
+  }, [currentEndDate]);
+
+  return (
+    <Box>
+      <Typography
+        variant="h1"
+        sx={{ textAlign: "center", fontSize: "60px", marginTop: 0 }}
+      >
+        {countdownText}
+      </Typography>
+
+      <Typography
+        variant="h1"
+        sx={{ textAlign: "center", fontSize: "60px", marginTop: "30px" }}
+      >
+        {countDownString}
+      </Typography>
+    </Box>
+  );
 }
 
 export default CountDown;
+
+/*
+import { Box, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+
+const firstEndDate = new Date("Aug 5, 2024 16:20:00").getTime();
+const secondEndDate = new Date("Dec 23, 2024 12:00:00").getTime();
+
+function CountDown() {
+  const [countDownString, setCountDownString] = useState("");
+  const [currentEndDate, setCurrentEndDate] = useState(firstEndDate);
+  const [hasVoteBegun, setHasVoteBegun] = useState(false);
+
+  function checkInterval() {
+    let now = new Date().getTime();
+    let distance = currentEndDate - now;
+
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    let hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    setCountDownString(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+
+    if (distance <= 0) {
+      if (currentEndDate === firstEndDate) {
+        setCurrentEndDate(secondEndDate);
+      } else {
+        setHasVoteBegun(true);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (hasVoteBegun) {
+      return;
+    }
+    checkInterval();
+    let interval = setInterval(checkInterval, 1000);
+    return () => clearInterval(interval);
+  }, [hasVoteBegun, currentEndDate]);
+
+  return (
+    <Box>
+      <Typography
+        variant="h1"
+        sx={{ textAlign: "center", fontSize: "60px", marginTop: 0 }}
+      >
+        {hasVoteBegun ? "Äänestys loppuu" : "Äänestys alkaa:"}
+      </Typography>
+      {!hasVoteBegun && (
+        <Typography
+          variant="h1"
+          sx={{ textAlign: "center", fontSize: "60px", marginTop: "30px" }}
+        >
+          {countDownString}
+        </Typography>
+      )}
+    </Box>
+  );
+}
+
+export default CountDown;
+*/

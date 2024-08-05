@@ -18,7 +18,7 @@ function Footer() {
             ":hover": { color: theme.palette.secondary[700] },
           }}
         >
-          {CurrentYear} Ministeri ry. All rights reserved.
+          © {CurrentYear} Ministerit ry. Kaikki oikeudet pidätetään.
         </Typography>
       </Box>
     </Box>

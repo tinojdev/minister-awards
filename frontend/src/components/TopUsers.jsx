@@ -136,7 +136,7 @@ const TopUsersTable = () => {
 
     <Box>
       <Typography variant="h2" component="h2">
-        Top users
+        Parhaat käyttäjät
       </Typography>
       <TableContainer sx={{}}>
         <Paper>
