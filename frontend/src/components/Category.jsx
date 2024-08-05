@@ -55,11 +55,3 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
 };
 
 export default Category;
-
-{
-	/* <CarouselItem image={"/assets/collage.png"} title={"Collage"}/>
-                    <CarouselItem image={"/assets/hazard.png"} title={"Hazard"}/>
-                    <CarouselItem image={"/assets/oni_red.png"} title={"Oni Red"}/>
-                    <CarouselItem image={"/assets/thedryeye.png"} title={"The Dry Eye"}/>
-                    <CarouselItem image={"/assets/whoops.png"} title={"Whoops"}/> */
-}
