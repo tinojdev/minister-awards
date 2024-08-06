@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import Home from "/src/scenes/home";
-import Wait from "/src/scenes/waiting_page";
-import Leaderboard from "/src/scenes/leaderboard";
+import Home from "/src/scenes/home/Home";
+import Wait from "/src/scenes/waiting_page/WaitingPage";
+import Leaderboard from "/src/scenes/leaderboard/Leaderboard";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import CategoriesScene from "./scenes/categories";
-import Layout from "/src/scenes/layout";
+import CategoriesScene from "./scenes/categories/Categories";
+import Layout from "/src/scenes/layout/Layout";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "/src/theme";

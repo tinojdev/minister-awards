@@ -14,7 +14,7 @@ import Test from "@/components/Test";
 import Category from "@/components/Category";
 import { useState } from "react";
 import TopUsersTable from "@/components/TopUsers";
-import Wait from "../waiting_page/waiting_page";
+import Wait from "../waiting_page/WaitingPage";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
