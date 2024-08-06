@@ -42,9 +42,9 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/" element={<Navigate to="/koti" replace />} />
               <Route
-                path="/home"
+                path="/koti"
                 element={
                   hasVoteBegun ? (
                     <Home />
@@ -54,7 +54,7 @@ function App() {
                 }
               />
               <Route path="/waiting_page" element={<Wait />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/tulostaulu" element={<Leaderboard />} />
               <Route path="/categories" element={<CategoriesScene />} />
             </Route>
           </Routes>
