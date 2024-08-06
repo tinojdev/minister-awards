@@ -1,6 +1,6 @@
 import { useGetCategoriesQuery } from "@/state/api";
 
-export default function CategoriesScene() {
+export default function Categories() {
 	const { data, error, isLoading } = useGetCategoriesQuery();
 	return (
 		<div>

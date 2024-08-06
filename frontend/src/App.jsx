@@ -11,57 +11,48 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "/src/theme";
 
 function App() {
-  let countDownDate = new Date("Dec 6, 2023 12:00:00").getTime();
-  const now = new Date().getTime();
-  const initialHasVoteBegun = countDownDate - now <= 0;
+	let countDownDate = new Date("Dec 6, 2023 12:00:00").getTime();
+	const now = new Date().getTime();
+	const initialHasVoteBegun = countDownDate - now <= 0;
 
-  const [hasVoteBegun, setHasVoteBegun] = useState(initialHasVoteBegun);
+	const [hasVoteBegun, setHasVoteBegun] = useState(initialHasVoteBegun);
 
-  console.log("🚀 ~ App ~ hasVoteBegun:", hasVoteBegun);
+	console.log("🚀 ~ App ~ hasVoteBegun:", hasVoteBegun);
 
-  useEffect(() => {
-    if (!hasVoteBegun) {
-      const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
-        if (distance <= 0) {
-          setHasVoteBegun(true);
-          clearInterval(interval);
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [hasVoteBegun, countDownDate]);
+	useEffect(() => {
+		if (!hasVoteBegun) {
+			const interval = setInterval(() => {
+				const now = new Date().getTime();
+				const distance = countDownDate - now;
+				if (distance <= 0) {
+					setHasVoteBegun(true);
+					clearInterval(interval);
+				}
+			}, 1000);
+			return () => clearInterval(interval);
+		}
+	}, [hasVoteBegun, countDownDate]);
 
-  const theme = createTheme(themeSettings);
+	const theme = createTheme(themeSettings);
 
-  return (
-    <div className="app">
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/koti" replace />} />
-              <Route
-                path="/koti"
-                element={
-                  hasVoteBegun ? (
-                    <Home />
-                  ) : (
-                    <Navigate to="/waiting_page" replace />
-                  )
-                }
-              />
-              <Route path="/waiting_page" element={<Wait />} />
-              <Route path="/tulostaulu" element={<Leaderboard />} />
-              <Route path="/categories" element={<CategoriesScene />} />
-            </Route>
-          </Routes>
-        </ThemeProvider>
-      </BrowserRouter>
-    </div>
-  );
+	return (
+		<div className="app">
+			<BrowserRouter>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<Routes>
+						<Route element={<Layout />}>
+							<Route path="/" element={<Navigate to="/home" replace />} />
+							<Route path="/home" element={hasVoteBegun ? <Home /> : <Navigate to="/waiting-page" replace />} />
+							<Route path="/waiting-page" element={<Wait />} />
+							<Route path="/leaderboard" element={<Leaderboard />} />
+							<Route path="/categories" element={<CategoriesScene />} />
+						</Route>
+					</Routes>
+				</ThemeProvider>
+			</BrowserRouter>
+		</div>
+	);
 }
 
 export default App;
