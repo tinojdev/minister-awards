@@ -25,10 +25,12 @@ import CountDownEnd from "./CountDownEnd";
 const navItems = [
   {
     text: "Koti",
+    path: "home",
     icon: <HomeIcon />,
   },
   {
     text: "Tulostaulu",
+    path: "leaderboard",
     icon: <LeaderboardIcon />,
   },
   {
@@ -88,7 +90,7 @@ const Sidebar = ({
               </Box>
             </Box>
             <List>
-              {navItems.map(({ text, icon }) => {
+              {navItems.map(({ text, path, icon }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -96,18 +98,17 @@ const Sidebar = ({
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
 
                 return (
                   <ListItem key={text} disablePadding>
                     <ListItemButton
                       onClick={() => {
-                        navigate(`/${lcText}`);
-                        setActive(lcText);
+                        navigate(`/${path}`);
+                        setActive(path);
                       }}
                       sx={{
                         color:
-                          active === lcText
+                          active === path
                             ? theme.palette.secondary[600]
                             : theme.palette.primary[1000],
                       }}
@@ -116,7 +117,7 @@ const Sidebar = ({
                         sx={{
                           ml: "2rem",
                           color:
-                            active === lcText
+                            active === path
                               ? theme.palette.secondary[600]
                               : theme.palette.primary[700],
                         }}
@@ -124,7 +125,7 @@ const Sidebar = ({
                         {icon}
                       </ListItemIcon>
                       <ListItemText primary={text} />
-                      {active === lcText && (
+                      {active === path && (
                         <ChevronRightOutlined sx={{ ml: "auto" }} />
                       )}
                     </ListItemButton>

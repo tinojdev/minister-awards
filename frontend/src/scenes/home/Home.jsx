@@ -15,6 +15,7 @@ import Category from "@/components/Category";
 import { useState } from "react";
 import TopUsersTable from "@/components/TopUsers";
 import Wait from "../waiting_page/WaitingPage";
+import CategoryLink from "@/components/CategoryLink";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
@@ -31,28 +32,6 @@ const Home = () => {
     }));
   };
 
-  const carousels = [
-    {
-      id: "Vuoden Taide",
-      nominations: [
-        { id: 1, name: "Collage", image: "/assets/collage.png" },
-        { id: 2, name: "Hazard", image: "/assets/hazard.png" },
-        { id: 3, name: "Oni Red", image: "/assets/oni_red.png" },
-        { id: 4, name: "The Dry Eye", image: "/assets/thedryeye.png" },
-        { id: 5, name: "Whoops", image: "/assets/whoops.png" },
-      ],
-    },
-    {
-      id: "Vuoden Poster",
-      nominations: [
-        { id: 1, name: "Albert Roschier", image: "/assets/albertroschier.png" },
-        { id: 2, name: "Fucking Dead", image: "/assets/fd.png" },
-        { id: 3, name: "Launch", image: "/assets/launch.png" },
-        { id: 4, name: "Smile!", image: "/assets/smile.png" },
-        { id: 5, name: "No Thanks", image: "/assets/thanks.png" },
-      ],
-    },
-  ];
 
   if (isLoading) {
     return (
@@ -82,6 +61,7 @@ const Home = () => {
   return (
     <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
       <Wait />
+      <CategoryLink></CategoryLink>
       <Box
         sx={{
           display: "flex",
