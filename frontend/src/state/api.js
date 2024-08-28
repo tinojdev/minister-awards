@@ -13,6 +13,9 @@ export const api = createApi({
 		getCategories: build.query({
 			query: () => "categories/",
 		}),
+		getVoters: build.query({
+			query: () => "voters/",
+		}),
 	}),
 });
 

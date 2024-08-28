@@ -5,58 +5,50 @@ const firstEndDate = new Date(import.meta.env.VITE_START_DATE).getTime();
 const secondEndDate = new Date(import.meta.env.VITE_END_DATE).getTime();
 
 function CountDown() {
-  const [countDownString, setCountDownString] = useState("");
-  const [currentEndDate, setCurrentEndDate] = useState(firstEndDate);
-  const [countdownText, setCountdownText] = useState("Äänestys alkaa:");
+	const [countDownString, setCountDownString] = useState("");
+	const [currentEndDate, setCurrentEndDate] = useState(firstEndDate);
+	const [countdownText, setCountdownText] = useState("Äitis alkaa:");
 
-  function checkInterval() {
-    let now = new Date().getTime();
-    let distance = currentEndDate - now;
+	function checkInterval() {
+		let now = new Date().getTime();
+		let distance = currentEndDate - now;
 
-    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    let hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    setCountDownString(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+		setCountDownString(`${days}d ${hours}h ${minutes}m ${seconds}s`);
 
-    if (distance <= 0) {
-      if (currentEndDate === firstEndDate) {
-        setCurrentEndDate(secondEndDate);
-        setCountdownText("Äänestys loppuu:");
-      } else {
-        setCountdownText("Tilanne on vittu!");
+		if (distance <= 0) {
+			if (currentEndDate === firstEndDate) {
+				setCurrentEndDate(secondEndDate);
+				setCountdownText("Äänestys loppuu:");
+			} else {
+				setCountdownText("Tilanne on vittu!");
 
-        setCountDownString("Abdu on vuoden ministeri!!!");
-      }
-    }
-  }
+				setCountDownString("Abdu on vuoden ministeri!!!");
+			}
+		}
+	}
 
-  useEffect(() => {
-    checkInterval();
-    let interval = setInterval(checkInterval, 1000);
-    return () => clearInterval(interval);
-  }, [currentEndDate]);
+	useEffect(() => {
+		checkInterval();
+		let interval = setInterval(checkInterval, 1000);
+		return () => clearInterval(interval);
+	}, [currentEndDate]);
 
-  return (
-    <Box>
-      <Typography
-        variant="h1"
-        sx={{ textAlign: "center", fontSize: "60px", marginTop: 0 }}
-      >
-        {countdownText}
-      </Typography>
+	return (
+		<Box>
+			<Typography variant="h1" sx={{ textAlign: "center", fontSize: "60px", marginTop: 0 }}>
+				{countdownText}
+			</Typography>
 
-      <Typography
-        variant="h1"
-        sx={{ textAlign: "center", fontSize: "60px", marginTop: "30px" }}
-      >
-        {countDownString}
-      </Typography>
-    </Box>
-  );
+			<Typography variant="h1" sx={{ textAlign: "center", fontSize: "60px", marginTop: "30px" }}>
+				{countDownString}
+			</Typography>
+		</Box>
+	);
 }
 
 export default CountDown;
