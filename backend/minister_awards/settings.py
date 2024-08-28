@@ -54,6 +54,7 @@ STATIC_URL = os.getenv("DJANGO_STATIC_URL", None) or "static/"
 
 INSTALLED_APPS = [
     "api.apps.ApiConfig",
+    "telegram_bot.apps.TelegramBotConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

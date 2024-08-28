@@ -3,8 +3,11 @@ from .models import Category, Nomination
 
 
 class NominationSerializer(serializers.ModelSerializer):
+    image_thumbnail = serializers.ImageField(read_only=True)
+
     class Meta:
         model = Nomination
+        fields = ["id", "name", "category", "image", "image_thumbnail"]
         fields = "__all__"
 
 
