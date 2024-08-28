@@ -22,4 +22,5 @@ urlpatterns = [
         views.NominationDetail.as_view(),
         name="nomination-detail",
     ),
+    path(r"voters/", views.VoterList.as_view(), name="voter-list"),
 ]

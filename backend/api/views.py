@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from django.http import Http404
 from rest_framework.reverse import reverse
 
-from .models import Category, Nomination
-from .serializers import CategorySerializer, NominationSerializer
+from .models import Category, Nomination, Voter
+from .serializers import CategorySerializer, NominationSerializer, VoterSerializer
 
 
 class ApiRoot(views.APIView):
@@ -23,6 +23,7 @@ class ApiRoot(views.APIView):
                 "nomination-detail": reverse(
                     "nomination-detail", args=[1, 1], request=request
                 ),
+                "voter-list": reverse("voter-list", request=request),
             }
         )
 
@@ -72,4 +73,13 @@ class NominationDetail(views.APIView):
     def get(self, request, category_id, nomination_id):
         nomination = self.get_object(nomination_id, category_id)
         serializer = self.serializer_class(nomination)
+        return Response(serializer.data)
+
+
+class VoterList(views.APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        voters = Voter.objects.all()
+        serializer = VoterSerializer(voters, many=True)
         return Response(serializer.data)
