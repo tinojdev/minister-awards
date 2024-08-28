@@ -7,7 +7,7 @@ const secondEndDate = new Date(import.meta.env.VITE_END_DATE).getTime();
 function CountDown() {
 	const [countDownString, setCountDownString] = useState("");
 	const [currentEndDate, setCurrentEndDate] = useState(firstEndDate);
-	const [countdownText, setCountdownText] = useState("Äitis alkaa:");
+	const [countdownText, setCountdownText] = useState("Äänestys alkaa:");
 
 	function checkInterval() {
 		let now = new Date().getTime();
