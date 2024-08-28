@@ -16,6 +16,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            source ~/.bashrc
+
             cd ./minister-awards/frontend
             git pull
 
