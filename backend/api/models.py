@@ -39,27 +39,23 @@ class Nomination(models.Model):
         verbose_name_plural = "Nominations"
 
 
-class User(models.Model):
-    first_name = models.CharField(max_length=100)
+class Voter(models.Model):
+    first_name = models.CharField(max_length=100, unique=True, primary_key=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
 
-    personal_id = models.CharField(max_length=100)
+    telegram_id = models.IntegerField(unique=True, blank=True, null=True)
+    personal_id = models.CharField(max_length=100, blank=True)
 
-    def save(
-        self,
-        force_insert: bool = ...,
-        force_update: bool = ...,
-        using: str | None = ...,
-        update_fields: Iterable[str] | None = ...,
-    ) -> None:
+    def save(self, *args, **kwargs) -> None:
         if not self.personal_id:
             characters = (
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
             )
             new_id = "".join(random.choices(characters, k=10))
+            self.personal_id = new_id
 
-        return super().save(force_insert, force_update, using, update_fields)
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.first_name
