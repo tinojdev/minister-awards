@@ -1,0 +1,23 @@
+name: Build frontend
+run-name: Building the frontend files
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and execute commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ./minister-awards/frontend
+            git pull
+
+            npm install
+            npx vite build --outDir /var/www/minister-awards/dist
