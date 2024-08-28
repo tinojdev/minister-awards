@@ -77,6 +77,17 @@ class NominationDetail(views.APIView):
 
 
 class VoterList(views.APIView):
+    """
+    Returns a list of all voters.
+
+    Returns:
+    [{
+    first_name: string,
+    last_name: string | null,
+    username: string | null,
+    }]
+    """
+
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
