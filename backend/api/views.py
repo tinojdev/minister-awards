@@ -1,10 +1,17 @@
 from rest_framework import viewsets, permissions, views
 from rest_framework.response import Response
 from django.http import Http404
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from rest_framework.reverse import reverse
 
-from .models import Category, Nomination, Voter
-from .serializers import CategorySerializer, NominationSerializer, VoterSerializer
+from .models import Category, Nomination, Voter, Vote
+from .serializers import (
+    CategorySerializer,
+    NominationSerializer,
+    VoterSerializer,
+    VoteSerializer,
+)
 
 
 class ApiRoot(views.APIView):
@@ -23,6 +30,7 @@ class ApiRoot(views.APIView):
                 "nomination-detail": reverse(
                     "nomination-detail", args=[1, 1], request=request
                 ),
+                "vote": reverse("vote", args=[1, 1], request=request),
                 "voter-list": reverse("voter-list", request=request),
             }
         )
@@ -80,17 +88,60 @@ class VoterList(views.APIView):
     """
     Returns a list of all voters.
 
+    Parameters:
+
+    - getTotalPoints: bool (default: false)
+        - If true, returns the total points for each voter.
+
     Returns:
+
+    <pre>
     [{
-    first_name: string,
-    last_name: string | null,
-    username: string | null,
+        first_name: string,
+        last_name: string | null,
+        username: string | null,
+        total_points: int | null ( not null only if getTotalPoints is true)
     }]
+    </pre>
     """
 
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
+        should_return_points = (
+            request.query_params.get("getTotalPoints", "false").lower() == "true"
+        )
+
+        if should_return_points:
+            voters = Voter.objects.all().annotate(
+                total_points=Sum("nominations__votes__weight")
+            )
+
+            serializer = VoterSerializer(voters, many=True)
+            return Response(serializer.data)
+
         voters = Voter.objects.all()
         serializer = VoterSerializer(voters, many=True)
         return Response(serializer.data)
+
+
+class VoteView(views.APIView):
+    """
+    Vote for a nomination.
+
+    Required fields
+    weight: int
+    """
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, category_id, nomination_id):
+        request.data["category"] = category_id
+        request.data["nomination"] = nomination_id
+
+        serializer = VoteSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+
+        serializer.save()
+        return Response({"message": "Vote received"})

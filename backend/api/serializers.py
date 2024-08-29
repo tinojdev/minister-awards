@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Nomination, Voter
+from .models import Category, Nomination, Voter, Vote
 
 
 class NominationSerializer(serializers.ModelSerializer):
@@ -21,6 +21,17 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class VoterSerializer(serializers.ModelSerializer):
+    total_points = serializers.IntegerField(
+        read_only=True, required=False, allow_null=True
+    )
+
     class Meta:
         model = Voter
-        fields = ["first_name", "last_name", "username"]
+        fields = ["first_name", "last_name", "username", "total_points"]
+
+
+class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        required_fields = ["weight"]
+        fields = "__all__"

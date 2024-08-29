@@ -1,9 +1,5 @@
-from typing import Iterable
-from PIL import Image
-from io import BytesIO
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
-from django.core.files import File
+from imagekit.processors import ResizeToFit
 from django.db import models
 
 import random
@@ -17,26 +13,6 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
-
-
-class Nomination(models.Model):
-    name = models.CharField(max_length=100)
-    category = models.ForeignKey(
-        Category, related_name="nominations", on_delete=models.CASCADE
-    )
-    image = models.ImageField(upload_to="nomination_images", blank=True, null=True)
-    image_thumbnail = ImageSpecField(
-        source="image",
-        format="JPEG",
-        processors=[ResizeToFill(300, 200)],
-        options={"quality": 60},
-    )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "Nominations"
 
 
 class Voter(models.Model):
@@ -59,3 +35,42 @@ class Voter(models.Model):
 
     def __str__(self):
         return self.first_name
+
+
+class Nomination(models.Model):
+    nominated_voter = models.ForeignKey(
+        Voter, related_name="nominations", on_delete=models.CASCADE
+    )
+    category = models.ForeignKey(
+        Category, related_name="nominations", on_delete=models.CASCADE
+    )
+
+    image = models.ImageField(upload_to="nomination_images", blank=True, null=True)
+    image_thumbnail = ImageSpecField(
+        source="image",
+        format="JPEG",
+        processors=[ResizeToFit(300, 200)],
+        options={"quality": 60},
+    )
+
+    def __str__(self):
+        return f"{self.nominated_voter} nominated for {self.category}"
+
+    class Meta:
+        verbose_name_plural = "Nominations"
+
+
+class Vote(models.Model):
+    voter = models.ForeignKey(Voter, related_name="votes", on_delete=models.CASCADE)
+    nomination = models.ForeignKey(
+        Nomination, related_name="votes", on_delete=models.CASCADE
+    )
+    category = models.ForeignKey(
+        Category, related_name="votes", on_delete=models.CASCADE
+    )
+
+    weight = models.PositiveIntegerField(blank=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.voter} voted for {self.nomination.nominated_voter} in {self.category}, weight: {self.weight}."
