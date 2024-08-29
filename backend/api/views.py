@@ -114,7 +114,7 @@ class VoterList(views.APIView):
 
         if should_return_points:
             voters = Voter.objects.all().annotate(
-                total_points=Sum("nominations__votes__weight")
+                total_points=Sum("nominations__votes__weight", 0)
             )
 
             serializer = VoterSerializer(voters, many=True)
