@@ -1,5 +1,5 @@
 import React from "react";
-import MryLogo from "@/assets/mry.png";
+import MryLogo from "@/assets/mryawards.png";
 import { Box, AppBar, Toolbar, IconButton, useTheme } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";

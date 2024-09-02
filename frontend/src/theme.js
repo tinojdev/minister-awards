@@ -2,6 +2,7 @@
 
 export const tokens = {
     primary: {
+        // white to black
         0: "#ffffff", // white
         10: "#f9f9f9",
         50: "#f0f0f0",
@@ -17,16 +18,16 @@ export const tokens = {
         1000: "#000000" // black
       },
       secondary: {
-        // golden
-        100: "#fff4cc",
-        200: "#ffe999",
-        300: "#ffde66",
-        400: "#ffd433",
-        500: "#ffc900",
-        600: "#cc9f00",
-        700: "#997500",
-        800: "#664c00",
-        900: "#332600"
+        // blue
+        100: "#cce5f4", // Lightest
+        200: "#99cbeb",
+        300: "#66b1e1",
+        400: "#3397d8",
+        500: "#0071BC", // Base
+        600: "#005b96",
+        700: "#004470",
+        800: "#002e4a",
+        900: "#001724" // Darkest
       }
 };
 

@@ -15,7 +15,7 @@ import Category from "@/components/Category";
 import { useState } from "react";
 import TopUsersTable from "@/components/TopUsers";
 import Wait from "../waiting_page/WaitingPage";
-import CategoryLink from "@/components/CategoryLink";
+import CategoryLink from "@/components/CategoryLinkTest";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
@@ -61,7 +61,9 @@ const Home = () => {
   return (
     <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
       <Wait />
-      <CategoryLink></CategoryLink>
+      <Box maxWidth={1000} margin="0 auto">
+        <CategoryLink />
+      </Box>
       <Box
         sx={{
           display: "flex",

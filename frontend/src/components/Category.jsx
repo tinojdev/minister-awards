@@ -1,36 +1,38 @@
-import React from "react";
-import { Box, Skeleton } from "@mui/material";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import React, { useState } from "react";
+import { Box, Grid, Button, Icon, useMediaQuery } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Header from "@/components/Header";
 import CarouselItem from "./CategoryItem";
-import { useState } from "react";
-
-const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
 
 const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
-  console.log("🚀 ~ Category ~ selectedId:", selectedId);
+  const [showmore, setShowmore] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const isXsmallScreen = useMediaQuery("(max-width: 600px)");
+  const isSmallScreen = useMediaQuery("(min-width: 601px) and (max-width: 960px)");
+  const isMediumScreen = useMediaQuery("(min-width: 961px) and (max-width: 1280px)");
+  const isLargeScreen = useMediaQuery("(min-width: 1281px)");
+
+  let rows = 220;
+
+  if (isXsmallScreen) {
+    rows *= 1.5;
+  } else if (isSmallScreen) {
+    rows *= 1.5;
+  }
 
   const handleCheckboxChange = (itemId) => {
-    onSelectionChange(id, itemId);
+    const isSelected = selectedItems.includes(itemId);
+
+    if (isSelected) {
+      setSelectedItems((prev) => prev.filter((id) => id !== itemId));
+    } else if (selectedItems.length < 3) {
+      setSelectedItems((prev) => [...prev, itemId]);
+    }
+  };
+
+  const handleButtonClick = () => {
+    setShowmore((prevState) => !prevState);
   };
 
   return (
@@ -39,16 +41,37 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
         <Header id={id} title={name} />
       </Box>
       <Box>
-        <Carousel responsive={responsive}>
+        <Grid container spacing={2} sx={{ overflow: showmore ? "visible" : "hidden", height: showmore ? "auto" : rows, width: "100%" }}>
           {nominations.map((nomination) => (
-            <CarouselItem
-              key={nomination.id}
-              nomination={nomination}
-              isSelected={selectedId === nomination.id}
-              onCheckboxChange={handleCheckboxChange}
-            />
+            <Grid item xs={12} sm={12} md={6} lg={6} key={nomination.id}>
+              <CarouselItem
+                nomination={nomination}
+                isSelected={selectedItems.includes(nomination.id)}
+                order={selectedItems.indexOf(nomination.id) + 1} // Pass the order to CarouselItem
+                onCheckboxChange={handleCheckboxChange}
+              />
+            </Grid>
           ))}
-        </Carousel>
+        </Grid>
+        <Box display="flex" justifyContent="center">
+          {nominations.length > 3 && (
+            <Button
+              onClick={handleButtonClick}
+              sx={{
+                borderRadius: 5,
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "inherit",
+                },
+              }}
+            >
+              {showmore ? "Näytä vähemmän" : "Näytä enemmän"}
+              <Icon sx={{ display: "flex" }}>
+                {showmore ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Icon>
+            </Button>
+          )}
+        </Box>
       </Box>
     </Box>
   );
