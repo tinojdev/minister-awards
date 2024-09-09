@@ -94,7 +94,7 @@ export default function CategoryLink() {
               >
                 <a
                   href={`#${category.id}`}
-                  style={{ textDecoration: "none", color: theme.palette.primary[1000], fontSize: "0.8rem" }}
+                  style={{ textDecoration: "none", color: theme.palette.primary[1000], fontSize: "0.8rem", width: "100%", textAlign: "center" }}
                 >
                   {category.name}
                 </a>
