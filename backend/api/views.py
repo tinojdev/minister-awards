@@ -145,3 +145,13 @@ class VoteView(views.APIView):
 
         serializer.save()
         return Response({"message": "Vote received"})
+
+    def delete(self, request, category_id, nomination_id):
+        try:
+            vote = Vote.objects.get(
+                category_id=category_id, nomination_id=nomination_id
+            )
+            vote.delete()
+            return Response({"message": "Vote removed"})
+        except Vote.DoesNotExist:
+            return Response({"message": "Vote not found"}, status=404)
