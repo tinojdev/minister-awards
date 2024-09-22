@@ -5,14 +5,18 @@ django.setup()
 
 from pathlib import Path
 import logging
-from api.models import Voter, Category
+import io
+from django.core.files.images import ImageFile
+from api.models import Voter, Category, Nomination
 from asgiref.sync import sync_to_async
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Message
 from telegram.ext import (
     ApplicationBuilder,
     ContextTypes,
     CommandHandler,
     CallbackQueryHandler,
+    ConversationHandler,
+    DictPersistence,
 )
 from dotenv import load_dotenv
 
@@ -20,6 +24,8 @@ from dotenv import load_dotenv
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
+
+CATEGORY, NOMINEE = range(2)
 
 
 async def join(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -72,27 +78,106 @@ def get_categories():
 async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     categories = await get_categories()
 
+    replied_to_message = update.message.reply_to_message
+    if not replied_to_message:
+        return -1
+
+    context.user_data["message"] = replied_to_message
+
     keyboard = []
     for category in categories:
         keyboard.append(
             [
-                InlineKeyboardButton(
-                    category.name, callback_data=f"{category.name}&&{category.id}"
-                )
+                InlineKeyboardButton(category.name, callback_data=f"{category.id}"),
             ]
         )
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Valitse kategoria.", reply_markup=reply_markup)
-
-
-async def nominate_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    category_name, category_id = query.data.split("&&")
-    await query.answer()
-    await query.edit_message_text(
-        "Valittu kategoria: {}".format(category_name), reply_markup=None
+    await replied_to_message.reply_text(
+        "Valitse kategoria.", reply_markup=reply_markup, quote=True
     )
+
+    return CATEGORY
+
+
+@sync_to_async
+def get_voters():
+    return list(Voter.objects.all())
+
+
+async def category_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    data = query.data
+    await query.answer()
+
+    category = await Category.objects.aget(id=int(data))
+    context.user_data["category"] = category
+
+    voters = await get_voters()
+
+    keyboard = []
+    for voter in voters:
+        keyboard.append(
+            [
+                InlineKeyboardButton(
+                    voter.first_name,
+                    callback_data=f"{voter.first_name}",
+                ),
+            ]
+        )
+
+    await query.edit_message_text(
+        "Valittu kategoria: {}. Valitse ehdokas:".format(category.name),
+        reply_markup=InlineKeyboardMarkup(keyboard),
+    )
+
+    return NOMINEE
+
+
+async def nominee_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    data = query.data
+    await query.answer()
+
+    voter = await Voter.objects.aget(first_name=data)
+    category = context.user_data["category"]
+    message: Message = context.user_data["message"]
+
+    if message.photo or message.sticker:
+        if message.photo:
+            photo = message.photo[-1]
+            photo_file = await photo.get_file()
+        if message.sticker:
+            photo_file = await message.sticker.get_file()
+
+        byte_arr = await photo_file.download_as_bytearray()
+        image = ImageFile(io.BytesIO(byte_arr), name="submission.jpg")
+
+        await Nomination.objects.acreate(
+            nominated_voter=voter,
+            category=category,
+            image=image,
+        )
+    else:
+        await Nomination.objects.acreate(
+            nominated_voter=voter,
+            category=category,
+            nomination_text=message.text,
+        )
+
+    await query.edit_message_text(
+        f"{voter.first_name} asetettu ehdolle kategoriassa {category.name}",
+        reply_markup=None,
+    )
+    return -1
+
+
+async def fallback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    if query:
+        await query.answer()
+
+    return -1
 
 
 if __name__ == "__main__":
@@ -100,13 +185,27 @@ if __name__ == "__main__":
     load_dotenv(BASE_DIR / ".." / ".env")
 
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    application = ApplicationBuilder().token(token).build()
+
+    persistence = DictPersistence()
+    application = ApplicationBuilder().token(token).persistence(persistence).build()
 
     application.add_handler(CommandHandler("join", join))
 
     application.add_handler(CommandHandler("start", start))
 
-    application.add_handler(CommandHandler("nominate", nominate))
-    application.add_handler(CallbackQueryHandler(nominate_button))
+    conv_handler = ConversationHandler(
+        conversation_timeout=180,
+        per_chat=True,
+        per_user=True,
+        per_message=False,
+        allow_reentry=True,
+        entry_points=[CommandHandler("nominate", nominate)],
+        states={
+            CATEGORY: [CallbackQueryHandler(category_callback)],
+            NOMINEE: [CallbackQueryHandler(nominee_callback)],
+        },
+        fallbacks=[CommandHandler("cancel", fallback_handler)],
+    )
+    application.add_handler(conv_handler)
 
     application.run_polling()
