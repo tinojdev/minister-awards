@@ -54,6 +54,8 @@ class Nomination(models.Model):
         options={"quality": 60},
     )
 
+    video = models.FileField(upload_to="nomination_videos", blank=True, null=True)
+
     def __str__(self):
         return f"{self.nominated_voter} nominated for {self.category}"
 

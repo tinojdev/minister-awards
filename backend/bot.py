@@ -7,6 +7,7 @@ from pathlib import Path
 import logging
 import io
 from django.core.files.images import ImageFile
+from django.core.files import File
 from api.models import Voter, Category, Nomination
 from asgiref.sync import sync_to_async
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Message
@@ -77,8 +78,9 @@ def get_categories():
 
 async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     categories = await get_categories()
-
     replied_to_message = update.message.reply_to_message
+
+    print(replied_to_message)
     if not replied_to_message:
         return -1
 
@@ -143,27 +145,41 @@ async def nominee_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     category = context.user_data["category"]
     message: Message = context.user_data["message"]
 
-    if message.photo or message.sticker:
-        if message.photo:
-            photo = message.photo[-1]
-            photo_file = await photo.get_file()
-        if message.sticker:
-            photo_file = await message.sticker.get_file()
+    image_file = None
+    video_file = None
 
+    if message.photo:
+        photo = message.photo[-1]
+        photo_file = await photo.get_file()
         byte_arr = await photo_file.download_as_bytearray()
-        image = ImageFile(io.BytesIO(byte_arr), name="submission.jpg")
+        image_file = ImageFile(io.BytesIO(byte_arr), name="submission.jpg")
+    elif message.sticker:
+        photo_file = await message.sticker.get_file()
+        byte_arr = await photo_file.download_as_bytearray()
+        if message.sticker.is_video:
+            video_file = File(io.BytesIO(byte_arr), name="submission.mp4")
+        elif message.sticker.is_animated:
+            await query.edit_message_text("Ei tuettu.", reply_markup=None)
+            return -1
+        else:
+            image_file = ImageFile(io.BytesIO(byte_arr), name="submission.jpg")
+    elif message.animation:
+        animation = message.animation
+        animation_file = await animation.get_file()
+        byte_arr = await animation_file.download_as_bytearray()
+        video_file = File(io.BytesIO(byte_arr), name="submission.mp4")
+    elif message.video:
+        video = message.video
+        video_file = await video.get_file()
+        byte_arr = await video_file.download_as_bytearray()
+        video_file = File(io.BytesIO(byte_arr), name="submission.mp4")
 
-        await Nomination.objects.acreate(
-            nominated_voter=voter,
-            category=category,
-            image=image,
-        )
-    else:
-        await Nomination.objects.acreate(
-            nominated_voter=voter,
-            category=category,
-            nomination_text=message.text,
-        )
+    await Nomination.objects.acreate(
+        nominated_voter=voter,
+        category=category,
+        image=image_file,
+        video=video_file,
+    )
 
     await query.edit_message_text(
         f"{voter.first_name} asetettu ehdolle kategoriassa {category.name}",
