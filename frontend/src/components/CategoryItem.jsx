@@ -17,15 +17,19 @@ const CarouselItem = ({ nomination, isSelected, onCheckboxChange }) => {
 	const handleChange = () => {
 		onCheckboxChange(nomination.id);
 	};
-	const nominationImgSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${nomination.image}`;
+
+	const mediaSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${nomination.image || nomination.video}`;
 
 	return (
 		<Box display="flex" width="300px" height="300px">
 			<Card sx={{ width: "100%", height: "99.5%" }}>
 				<CardMedia
-					component="img"
+					component={nomination.image ? "img" : "video"}
 					sx={{ height: "70%", width: "100%", objectFit: "contain", backgroundColor: theme.palette.primary[50] }}
-					image={nominationImgSrc}
+					src={mediaSrc}
+					autoPlay
+					muted
+					loop
 				/>
 				<CardContent sx={{ flexGrow: 1, height: "15%" }}>
 					<Typography gutterBottom variant="h4" component="div">
