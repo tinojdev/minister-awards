@@ -146,6 +146,16 @@ class VoteView(views.APIView):
         serializer.save()
         return Response({"message": "Vote received"})
 
+    def get(self, request, category_id, nomination_id):
+        try:
+            votes = Vote.objects.filter(
+                category_id=category_id, nomination_id=nomination_id
+            )
+            serializer = VoteSerializer(votes, many=True)
+            return Response(serializer.data)
+        except Vote.DoesNotExist:
+            return Response({"message": "Vote not found"}, status=404)
+
     def delete(self, request, category_id, nomination_id):
         try:
             vote = Vote.objects.get(
