@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { ChevronRightOutlined, ChevronLeft } from "@mui/icons-material";
-import MryLogo from "@/assets/mryy.png";
+import MryLogo from "@/assets/awards.png";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
@@ -109,7 +109,7 @@ const Sidebar = ({
                       sx={{
                         color:
                           active === path
-                            ? theme.palette.secondary[600]
+                            ? theme.palette.secondary[500]
                             : theme.palette.primary[1000],
                       }}
                     >
@@ -118,7 +118,7 @@ const Sidebar = ({
                           ml: "2rem",
                           color:
                             active === path
-                              ? theme.palette.secondary[600]
+                              ? theme.palette.secondary[500]
                               : theme.palette.primary[700],
                         }}
                       >

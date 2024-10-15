@@ -19,6 +19,7 @@ import CategoryLink from "@/components/CategoryLink";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
+  console.log("🚀 ~ Home ~ data:", data)
 
   const [selections, setSelections] = useState({});
   console.log("🚀 ~ Home ~ selections:", selections);
@@ -60,6 +61,9 @@ const Home = () => {
   return (
     <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
       <Wait />
+      <Box maxWidth={1000} margin="0 auto">
+        <CategoryLink />
+      </Box>
       <Box
         sx={{
           display: "flex",

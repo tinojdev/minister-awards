@@ -56,3 +56,12 @@ body,
   font-size: 60px;
   margin-top: 0px;
 }
+
+.react-multi-carousel-item {
+  flex: 1 1 auto; /* Allow the item to grow and shrink */
+  max-width: none !important; /* Remove the enforced max-width */
+  padding: 5px;
+}
+.react-multi-carousel-item:last-child {
+  margin-right: 0; /* Ensures the last item fits correctly */
+}
