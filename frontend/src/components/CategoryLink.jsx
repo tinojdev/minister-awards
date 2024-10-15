@@ -40,44 +40,7 @@ export default function CategoryLink() {
     },
   };
   const [currentSlide, setCurrentSlide] = useState(0);
-  // const { data, error, isLoading } = useGetCategoriesQuery();
-  const data = [
-    {
-      id: 1,
-      nominations: ["Nomination A", "Nomination B", "Nomination C"],
-      name: "Vuoden taide",
-    },
-    {
-      id: 2,
-      nominations: ["Nomination D"],
-      name: "Vuoden fakiiri",
-    },
-    {
-      id: 3,
-      nominations: ["Nomination D"],
-      name: "Vuoden fakiiri",
-    },
-    {
-      id: 3,
-      nominations: ["Nomination D"],
-      name: "Vuoden fakiiri",
-    },
-    {
-      id: 3,
-      nominations: ["Nomination D"],
-      name: "Vuoden fakiiri",
-    },
-    {
-      id: 3,
-      nominations: ["Nomination D"],
-      name: "Vuoden fakiiri",
-    },
-    {
-      id: 3,
-      nominations: ["Nomination D"],
-      name: "Vuoden fakiiri",
-    },
-  ];
+  const { data, error, isLoading } = useGetCategoriesQuery();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
