@@ -15,7 +15,7 @@ export default function CategoryLink() {
 
   return (
     <div>
-      <h1 style={{ color: "black" }}>Categories</h1>
+      <h1 style={{ color: "black" }}>Kategoriat</h1>
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
       {data && (

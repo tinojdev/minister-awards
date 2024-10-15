@@ -16,7 +16,16 @@ export const api = createApi({
     getVoters: build.query({
       query: () => "voters/?getTotalPoints=true",
     }),
+    getVotesByNomination: build.query({
+      query: ({ categoryId, nominationId }) =>
+        `categories/${categoryId}/nominations/${nominationId}/vote`,
+    }),
   }),
 });
 
-export const { useGetNominationsByCategoryQuery, useGetCategoriesQuery, useGetVotersQuery } = api;
+export const {
+  useGetNominationsByCategoryQuery,
+  useGetCategoriesQuery,
+  useGetVotersQuery,
+  useGetVotesByNominationQuery,
+} = api;

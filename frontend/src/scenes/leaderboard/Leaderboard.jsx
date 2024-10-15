@@ -1,56 +1,137 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import {
+  useGetCategoriesQuery,
+  useGetVotersQuery,
+  useGetVotesByNominationQuery,
+} from "@/state/api";
+import { Box, List, ListItem, Typography } from "@mui/material";
+import { LeaderboardNominationItem } from "./LeaderboardNominationItem";
 
 const Leaderboard = () => {
-    return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Dessert (100g serving)</TableCell>
-                        <TableCell align="right">Calories</TableCell>
-                        <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                        <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                        <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="right">{row.calories}</TableCell>
-                            <TableCell align="right">{row.fat}</TableCell>
-                            <TableCell align="right">{row.carbs}</TableCell>
-                            <TableCell align="right">{row.protein}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    )
-}
+  // Fetch categories and voters
+  const {
+    data: categories,
+    error: categoryError,
+    isLoading: isLoadingCategories,
+  } = useGetCategoriesQuery();
+  const {
+    data: voters,
+    error: votersError,
+    isLoading: isLoadingVoters,
+  } = useGetVotersQuery();
 
-export default Leaderboard
+  // Check if data is loading or if there are errors
+  if (isLoadingCategories || isLoadingVoters) {
+    return <p>Loading...</p>;
+  }
+
+  if (categoryError || votersError) {
+    return <p>Error loading data</p>;
+  }
+
+  // Sort voters by total_score in descending order
+  const sortedVoters = [...voters].sort(
+    (a, b) => b.total_points - a.total_points
+  );
+
+  return (
+    <Box>
+      {categories.map((c) => (
+        <List>
+          <Typography key={c.id}>{c.name}</Typography>
+
+          {c.nominations.map((n) => (
+            <LeaderboardNominationItem nomination={n} />
+          ))}
+        </List>
+      ))}
+
+      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+        <Table
+          sx={{ minWidth: 650, borderCollapse: "collapse" }}
+          aria-label="leaderboard table"
+        >
+          {/* Table Head with styling */}
+          <TableHead>
+            <TableRow>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  backgroundColor: "#f5f5f5",
+                  textAlign: "center",
+                }}
+              ></TableCell>
+              {categories.map((category) => (
+                <TableCell
+                  key={category.id}
+                  align="center"
+                  sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
+                >
+                  {category.name}
+                </TableCell>
+              ))}
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  backgroundColor: "#f5f5f5",
+                  textAlign: "center",
+                }}
+              >
+                Total Points
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          {/* Table Body with zebra-striping */}
+          <TableBody>
+            {sortedVoters.map((voter, index) => (
+              <TableRow
+                key={voter.id}
+                sx={{
+                  "&:nth-of-type(odd)": { backgroundColor: "#f9f9f9" },
+                  "&:hover": { backgroundColor: "#e0f7fa" },
+                }}
+              >
+                {/* User Name */}
+                <TableCell
+                  align="center"
+                  sx={{ padding: "10px", fontSize: "1rem" }}
+                >
+                  {voter.first_name}
+                </TableCell>
+
+                {/* Category Points Placeholder */}
+                {categories.map((category) => (
+                  <TableCell
+                    key={category.id}
+                    align="center"
+                    sx={{ padding: "10px" }}
+                  >
+                    -
+                  </TableCell>
+                ))}
+
+                {/* Total Points */}
+                <TableCell
+                  align="center"
+                  sx={{ padding: "10px", fontSize: "1rem", fontWeight: "bold" }}
+                >
+                  {voter.total_points}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
+};
+
+export default Leaderboard;

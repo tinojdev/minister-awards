@@ -32,7 +32,6 @@ const Home = () => {
     }));
   };
 
-
   if (isLoading) {
     return (
       <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
@@ -61,7 +60,6 @@ const Home = () => {
   return (
     <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
       <Wait />
-      <CategoryLink></CategoryLink>
       <Box
         sx={{
           display: "flex",
@@ -80,7 +78,6 @@ const Home = () => {
             />
           ))}
         </Box>
-        <TopUsersTable />
       </Box>
     </Box>
   );
