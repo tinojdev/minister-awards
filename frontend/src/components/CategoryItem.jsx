@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import { Box, Card, CardMedia, CardContent, CardActions, Typography, Button, Checkbox, useTheme, Modal, IconButton } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  Checkbox,
+  useTheme,
+  Modal,
+  IconButton,
+} from "@mui/material";
 import Checkedbox from "./Checkedbox";
 import Uncheckedbox from "./Uncheckedbox";
-import CloseIcon from '@mui/icons-material/Close';
-import { alpha } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
+import { alpha } from "@mui/material";
 
 const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
   const [open, setOpen] = useState(false);
@@ -16,7 +28,9 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const nominationImgSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${nomination.image}`;
+  const nominationImgSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${
+    nomination.image
+  }`;
 
   return (
     <Box display="flex" height="90px">
@@ -33,18 +47,42 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
       >
         <CardMedia
           component="img"
-          sx={{ height: "100%", width: "25%", objectFit: "contain", backgroundColor: theme.palette.primary[200] }}
+          sx={{
+            height: "100%",
+            width: "25%",
+            objectFit: "contain",
+            backgroundColor: theme.palette.primary[200],
+          }}
           image={nominationImgSrc}
           onClick={handleOpen}
         />
-        <CardContent sx={{ flexGrow: 1, height: "15%", display: "flex", alignItems: "center" }}>
+        <CardContent
+          sx={{
+            flexGrow: 1,
+            height: "15%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Typography gutterBottom variant="h4" component="div">
             {nomination.name}
             Test Test
           </Typography>
         </CardContent>
-        <CardActions sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "15%" }}>
-          <Checkbox checked={isSelected} onChange={handleChange} icon={<Uncheckedbox />} checkedIcon={<Checkedbox order={order}/>} />
+        <CardActions
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "15%",
+          }}
+        >
+          <Checkbox
+            checked={isSelected}
+            onChange={handleChange}
+            icon={<Uncheckedbox />}
+            checkedIcon={<Checkedbox order={order} />}
+          />
         </CardActions>
       </Card>
       <Modal
@@ -67,18 +105,25 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
           }}
         >
           {/* Enlarged image */}
-          <img src={nominationImgSrc} alt="Enlarged Image" style={{ width: "100%", height: "auto", objectFit: "contain" }} />
-		  <IconButton onClick={handleClose} sx={{
-            position: "absolute",
-            top: "5%",
-            left: "94%",
-            transform: "translate(-50%, -50%)",
-            boxShadow: 24,
-			opacity: "100%",
-			backgroundColor: alpha(theme.palette.primary[300], 0.8),
-          }}>
-		  	<CloseIcon sx={{color: theme.palette.primary[1000]}}/>
-		  </IconButton>
+          <img
+            src={nominationImgSrc}
+            alt="Enlarged Image"
+            style={{ width: "100%", height: "auto", objectFit: "contain" }}
+          />
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              top: "5%",
+              left: "94%",
+              transform: "translate(-50%, -50%)",
+              boxShadow: 24,
+              opacity: "100%",
+              backgroundColor: alpha(theme.palette.primary[300], 0.8),
+            }}
+          >
+            <CloseIcon sx={{ color: theme.palette.primary[1000] }} />
+          </IconButton>
         </Box>
       </Modal>
     </Box>

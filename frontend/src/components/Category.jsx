@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Grid, Button, Icon, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Button,
+  Icon,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Header from "@/components/Header";
@@ -9,8 +16,8 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
   const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  const isXsmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const isSmallScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
   let rows = 220;
 
   if (isXsmallScreen) {
@@ -39,7 +46,15 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
         <Header id={id} title={name} />
       </Box>
       <Box>
-        <Grid container spacing={2} sx={{ overflow: showmore ? "visible" : "hidden", height: showmore ? "auto" : rows, width: "100%" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            overflow: showmore ? "visible" : "hidden",
+            height: showmore ? "auto" : rows,
+            width: "100%",
+          }}
+        >
           {nominations.map((nomination) => (
             <Grid item xs={12} sm={12} md={6} lg={6} key={nomination.id}>
               <CarouselItem
