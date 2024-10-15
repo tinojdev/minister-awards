@@ -25,13 +25,12 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
     onCheckboxChange(nomination.id);
   };
 
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const mediaSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${
-    nomination.image
-   || nomination.video}`;
+    nomination.image || nomination.video
+  }`;
 
   return (
     <Box display="flex" height="90px">
@@ -55,9 +54,9 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
             backgroundColor: theme.palette.primary[200],
           }}
           src={mediaSrc}
-					autoPlay
-					muted
-					loop
+          autoPlay
+          muted
+          loop
           onClick={handleOpen}
         />
         <CardContent
@@ -110,7 +109,7 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
         >
           {/* Enlarged image */}
           <img
-            src={nominationImgSrc}
+            src={mediaSrc}
             alt="Enlarged Image"
             style={{ width: "100%", height: "auto", objectFit: "contain" }}
           />
