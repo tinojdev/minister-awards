@@ -11,31 +11,19 @@ export default function CategoryLink() {
   const theme = useTheme();
   const responsive = {
     superLargeDesktop: {
-      breakpoint: {
-        max: theme.breakpoints.values.xl,
-        min: theme.breakpoints.values.lg,
-      },
+      breakpoint: { max: 4000, min: 3000 },
       items: 4,
     },
     desktop: {
-      breakpoint: {
-        max: theme.breakpoints.values.lg,
-        min: theme.breakpoints.values.md,
-      },
+      breakpoint: { max: 3000, min: 1024 },
       items: 4,
     },
     tablet: {
-      breakpoint: {
-        max: theme.breakpoints.values.md,
-        min: theme.breakpoints.values.sm,
-      },
+      breakpoint: { max: 1024, min: 464 },
       items: 3,
     },
     mobile: {
-      breakpoint: {
-        max: theme.breakpoints.values.sm,
-        min: theme.breakpoints.values.xs,
-      },
+      breakpoint: { max: 464, min: 0 },
       items: 2.5,
     },
   };
