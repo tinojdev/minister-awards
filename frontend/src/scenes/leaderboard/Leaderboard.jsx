@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Box, Typography, List } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,12 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {
-  useGetCategoriesQuery,
-  useGetVotersQuery,
-  useGetVotesByNominationQuery,
-} from "@/state/api";
-import { Box, List, ListItem, Typography } from "@mui/material";
+import { useGetCategoriesQuery, useGetVotersQuery } from "@/state/api";
 import { LeaderboardNominationItem } from "./LeaderboardNominationItem";
 
 const Leaderboard = () => {
@@ -27,6 +23,11 @@ const Leaderboard = () => {
     isLoading: isLoadingVoters,
   } = useGetVotersQuery();
 
+  // Use fallback to ensure voters is an array
+  const sortedVoters = Array.isArray(voters)
+    ? [...voters].sort((a, b) => b.total_points - a.total_points)
+    : [];
+
   // Check if data is loading or if there are errors
   if (isLoadingCategories || isLoadingVoters) {
     return <p>Loading...</p>;
@@ -36,21 +37,30 @@ const Leaderboard = () => {
     return <p>Error loading data</p>;
   }
 
-  // Sort voters by total_score in descending order
-  const sortedVoters = [...voters].sort(
-    (a, b) => b.total_points - a.total_points
-  );
-
   return (
-    <Box>
+    <Box sx={{ padding: 4 }}>
+      {/* Loop over categories */}
       {categories.map((c) => (
-        <List>
-          <Typography key={c.id}>{c.name}</Typography>
+        <Box key={c.id} sx={{ marginBottom: 4 }}>
+          {/* Category Name */}
+          <Typography variant="h2" sx={{ marginBottom: 2 }}>
+            {c.name}
+          </Typography>
 
-          {c.nominations.map((n) => (
-            <LeaderboardNominationItem nomination={n} />
-          ))}
-        </List>
+          {/* Nominations in a List */}
+          <List
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            {c.nominations.map((n) => (
+              <LeaderboardNominationItem nomination={n} key={n.id} />
+            ))}
+          </List>
+        </Box>
       ))}
 
       <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
