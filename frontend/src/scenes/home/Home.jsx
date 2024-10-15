@@ -15,10 +15,11 @@ import Category from "@/components/Category";
 import { useState } from "react";
 import TopUsersTable from "@/components/TopUsers";
 import Wait from "../waiting_page/WaitingPage";
-import CategoryLink from "@/components/CategoryLinkTest";
+import CategoryLink from "@/components/CategoryLink";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
+  console.log("🚀 ~ Home ~ data:", data)
 
   const [selections, setSelections] = useState({});
   console.log("🚀 ~ Home ~ selections:", selections);

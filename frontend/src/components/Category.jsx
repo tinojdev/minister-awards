@@ -1,18 +1,16 @@
 import React, { useState } from "react";
-import { Box, Grid, Button, Icon, useMediaQuery } from "@mui/material";
+import { Box, Grid, Button, Icon, useMediaQuery, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Header from "@/components/Header";
 import CarouselItem from "./CategoryItem";
 
 const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
+  const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  const isXsmallScreen = useMediaQuery("(max-width: 600px)");
-  const isSmallScreen = useMediaQuery("(min-width: 601px) and (max-width: 960px)");
-  const isMediumScreen = useMediaQuery("(min-width: 961px) and (max-width: 1280px)");
-  const isLargeScreen = useMediaQuery("(min-width: 1281px)");
-
+  const isXsmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   let rows = 220;
 
   if (isXsmallScreen) {
