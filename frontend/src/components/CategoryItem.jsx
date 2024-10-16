@@ -113,7 +113,6 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
           {/* Enlarged image */}
           {mediaSrc.endsWith(".mp4") ? (
             <video
-              controls
               autoPlay
               loop
               style={{
@@ -121,6 +120,8 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
                 height: "auto",
                 maxHeight: "50vh",
                 maxWidth: "50vw",
+                minHeight: "25vh",
+                minWidth: "30vw",
                 objectFit: "contain",
               }}
             >
