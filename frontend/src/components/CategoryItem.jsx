@@ -101,13 +101,9 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "auto",
-            height: "auto",
-            maxWidth: "50vw",
+            maxWidth: "70vw",
             maxHeight: "50vh",
             backgroundColor: "transparent",
-            outline: "none",
-            boxShadow: 24,
           }}
         >
           {/* Enlarged image */}
@@ -116,13 +112,8 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
               autoPlay
               loop
               style={{
-                width: "auto",
-                height: "auto",
-                maxHeight: "50vh",
-                maxWidth: "50vw",
-                minHeight: "25vh",
-                minWidth: "30vw",
-                objectFit: "contain",
+                width: "70vw",
+                objectFit: "cover",
               }}
             >
               <source src={mediaSrc} type="video/mp4" />
