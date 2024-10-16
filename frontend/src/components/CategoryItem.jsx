@@ -98,7 +98,7 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
         <Box
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "40%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             maxWidth: "70vw",
@@ -113,7 +113,8 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
               loop
               style={{
                 width: "70vw",
-                objectFit: "cover",
+                maxHeight: "70vh",
+                objectFit: "fill",
               }}
             >
               <source src={mediaSrc} type="video/mp4" />
