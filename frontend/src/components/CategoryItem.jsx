@@ -20,6 +20,7 @@ import { alpha } from "@mui/material";
 const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
+  console.log(nomination);
 
   const handleChange = () => {
     onCheckboxChange(nomination.id);
@@ -31,6 +32,7 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
   const mediaSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${
     nomination.image || nomination.video
   }`;
+  console.log("🚀 ~ CarouselItem ~  mediaSrc:", mediaSrc);
 
   return (
     <Box display="flex" height="90px">
@@ -51,7 +53,7 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
             height: "100%",
             width: "25%",
             objectFit: "contain",
-            backgroundColor: theme.palette.primary[200],
+            backgroundColor: "inherit",
           }}
           src={mediaSrc}
           autoPlay
@@ -68,8 +70,7 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
           }}
         >
           <Typography gutterBottom variant="h4" component="div">
-            {nomination.name}
-            Test Test
+            {nomination.nomination_text}
           </Typography>
         </CardContent>
         <CardActions
@@ -100,26 +101,51 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            maxHeight: "50%",
-            maxWidth: "50%",
-            backgroundColor: "white",
+            width: "auto",
+            height: "auto",
+            maxWidth: "50vw",
+            maxHeight: "50vh",
+            backgroundColor: "transparent",
             outline: "none",
             boxShadow: 24,
           }}
         >
           {/* Enlarged image */}
-          <img
-            src={mediaSrc}
-            alt="Enlarged Image"
-            style={{ width: "100%", height: "auto", objectFit: "contain" }}
-          />
+          {mediaSrc.endsWith(".mp4") ? (
+            <video
+              controls
+              autoPlay
+              loop
+              style={{
+                width: "auto",
+                height: "auto",
+                maxHeight: "50vh",
+                maxWidth: "50vw",
+                objectFit: "contain",
+              }}
+            >
+              <source src={mediaSrc} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={mediaSrc}
+              alt="Media"
+              style={{
+                width: "auto",
+                height: "auto",
+                maxHeight: "50vh",
+                maxWidth: "50vw",
+                objectFit: "contain",
+              }}
+            />
+          )}
           <IconButton
             onClick={handleClose}
             sx={{
               position: "absolute",
-              top: "5%",
-              left: "94%",
-              transform: "translate(-50%, -50%)",
+              top: "1%",
+              right: "2%",
               boxShadow: 24,
               opacity: "100%",
               backgroundColor: alpha(theme.palette.primary[300], 0.8),
