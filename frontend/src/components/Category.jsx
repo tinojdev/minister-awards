@@ -39,12 +39,12 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
     : nominations.slice(0, 4);
 
   return (
-    <Box marginBottom="2rem" width="100%" maxWidth="1000px">
-      <Box display="flex" alignItems="start" marginBottom="0.5rem">
+    <Box marginBottom="2rem" width="100%" maxWidth="none">
+      <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
         <Header id={id} title={name} />
       </Box>
-      <Box >
-        <Grid container spacing={2} >
+      <Box width="100%">
+        <Grid container spacing={2} width="100%">
           {itemsToShow.map((nomination) => (
             <Grid
               item
@@ -53,12 +53,15 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
               md={6}
               lg={6}
               key={nomination.id}
-              sx={{ flexGrow: 1 }}
+              sx={{
+                maxHeight: '100px',
+                width: !isSmallScreen ? "300px" : "auto"
+              }}
             >
               <CarouselItem
                 nomination={nomination}
                 isSelected={selectedItems.includes(nomination.id)}
-                order={selectedItems.indexOf(nomination.id) + 1} 
+                order={selectedItems.indexOf(nomination.id) + 1}
                 onCheckboxChange={handleCheckboxChange}
               />
             </Grid>

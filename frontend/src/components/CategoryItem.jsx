@@ -98,30 +98,23 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
         <Box
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "40%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "auto",
-            height: "auto",
-            maxWidth: "50vw",
+            maxWidth: "70vw",
             maxHeight: "50vh",
             backgroundColor: "transparent",
-            outline: "none",
-            boxShadow: 24,
           }}
         >
           {/* Enlarged image */}
           {mediaSrc.endsWith(".mp4") ? (
             <video
-              controls
               autoPlay
               loop
               style={{
-                width: "auto",
-                height: "auto",
-                maxHeight: "50vh",
-                maxWidth: "50vw",
-                objectFit: "contain",
+                width: "70vw",
+                maxHeight: "70vh",
+                objectFit: "fill",
               }}
             >
               <source src={mediaSrc} type="video/mp4" />
