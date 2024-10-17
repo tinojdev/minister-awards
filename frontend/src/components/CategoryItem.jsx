@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Card,
@@ -6,7 +6,6 @@ import {
   CardContent,
   CardActions,
   Typography,
-  Button,
   Checkbox,
   useTheme,
   Modal,
@@ -20,7 +19,6 @@ import { alpha } from "@mui/material";
 const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  console.log(nomination);
 
   const handleChange = () => {
     onCheckboxChange(nomination.id);
@@ -32,7 +30,6 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
   const mediaSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${
     nomination.image || nomination.video
   }`;
-  console.log("🚀 ~ CarouselItem ~  mediaSrc:", mediaSrc);
 
   return (
     <Box display="flex" height="90px">

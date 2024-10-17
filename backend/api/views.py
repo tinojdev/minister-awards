@@ -30,7 +30,8 @@ class ApiRoot(views.APIView):
                 "nomination-detail": reverse(
                     "nomination-detail", args=[1, 1], request=request
                 ),
-                "vote": reverse("vote", args=[1, 1], request=request),
+                "vote": reverse("vote-detail", args=[1], request=request),
+                "votes": reverse("vote-list", request=request),
                 "voter-list": reverse("voter-list", request=request),
             }
         )
@@ -125,7 +126,7 @@ class VoterList(views.APIView):
         return Response(serializer.data)
 
 
-class VoteView(views.APIView):
+class VoteListView(views.APIView):
     """
     Vote for a nomination.
 
@@ -135,22 +136,36 @@ class VoteView(views.APIView):
 
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request, category_id, nomination_id):
-        request.data["category"] = category_id
-        request.data["nomination"] = nomination_id
-
+    def post(
+        self,
+        request,
+    ):
         serializer = VoteSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=400)
 
         serializer.save()
         return Response({"message": "Vote received"})
 
-    def get(self, request, category_id, nomination_id):
+    def get(self, request):
+
+        filters = {}
+        category_id = request.query_params.get("categoryId", None)
+        if category_id:
+            filters["category_id"] = category_id
+        nomination_id = request.query_params.get("nominationId", None)
+        if nomination_id:
+            filters["nomination_id"] = nomination_id
+
+        only_personal_votes = (
+            request.query_params.get("onlyPersonalVotes", "false").lower() == "true"
+        )
+
         try:
-            votes = Vote.objects.filter(
-                category_id=category_id, nomination_id=nomination_id
-            )
+            if only_personal_votes:
+                votes = Vote.objects.filter(voter="Tino", **filters)
+            else:
+                votes = Vote.objects.filter(**filters)
             serializer = VoteSerializer(votes, many=True)
             return Response(serializer.data)
         except Vote.DoesNotExist:
@@ -161,6 +176,26 @@ class VoteView(views.APIView):
             vote = Vote.objects.get(
                 category_id=category_id, nomination_id=nomination_id
             )
+            vote.delete()
+            return Response({"message": "Vote removed"})
+        except Vote.DoesNotExist:
+            return Response({"message": "Vote not found"}, status=404)
+
+
+class VoteDetailView(views.APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, vote_id):
+        try:
+            vote = Vote.objects.get(pk=vote_id)
+            serializer = VoteSerializer(vote)
+            return Response(serializer.data)
+        except Vote.DoesNotExist:
+            return Response({"message": "Vote not found"}, status=404)
+
+    def delete(self, request, vote_id):
+        try:
+            vote = Vote.objects.get(pk=vote_id)
             vote.delete()
             return Response({"message": "Vote removed"})
         except Vote.DoesNotExist:
