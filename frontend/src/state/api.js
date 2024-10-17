@@ -7,7 +7,7 @@ export const api = createApi({
     baseUrl: `${import.meta.env.VITE_BASE_API_URL}/`,
   }),
   reducerPath: "adminApi",
-  tagTypes: ["User"],
+  tagTypes: ["Vote"],
   endpoints: (build) => ({
     getNominationsByCategory: build.query({
       query: (categoryId) => `categories/${categoryId}/nominations/`,
@@ -26,9 +26,11 @@ export const api = createApi({
             nominationId: nominationId,
             onlyPersonalVotes: onlyPersonalVotes,
           },
+
           url: `votes/`,
         };
       },
+      providesTags: ["Vote"],
     }),
     postVote: build.mutation({
       query: ({ categoryId, nominationId, weight }) => {
@@ -43,6 +45,7 @@ export const api = createApi({
           },
         };
       },
+      invalidatesTags: ["Vote"],
     }),
     deleteVote: build.mutation({
       query: ({ voteId }) => {
@@ -51,6 +54,7 @@ export const api = createApi({
           method: "DELETE",
         };
       },
+      invalidatesTags: ["Vote"],
     }),
   }),
 });
