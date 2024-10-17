@@ -19,10 +19,8 @@ import CategoryLink from "@/components/CategoryLink";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
-  console.log("🚀 ~ Home ~ data:", data)
 
   const [selections, setSelections] = useState({});
-  console.log("🚀 ~ Home ~ selections:", selections);
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
 
