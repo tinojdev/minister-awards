@@ -6,13 +6,14 @@ import {
   Icon,
   useMediaQuery,
   useTheme,
+  Skeleton
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Header from "@/components/Header";
 import CarouselItem from "./CategoryItem";
 
-const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
+const Category = ({ id, name, nominations }) => {
   const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -37,7 +38,6 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
     : isSmallScreen
     ? nominations.slice(0, 3)
     : nominations.slice(0, 4);
-
   return (
     <Box marginBottom="2rem" width="100%" maxWidth="none">
       <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
@@ -54,8 +54,8 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
               lg={6}
               key={nomination.id}
               sx={{
-                maxHeight: '100px',
-                width: !isSmallScreen ? "300px" : "auto"
+                maxHeight: "100px",
+                width: !isSmallScreen ? "300px" : "auto",
               }}
             >
               <CarouselItem

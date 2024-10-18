@@ -77,6 +77,7 @@ const Home = () => {
               id={category.id}
               name={category.name}
               nominations={category.nominations}
+              isLoading={isLoading}
               selectedId={selections[category.id]}
               onSelectionChange={handleSelectionChange}
             />

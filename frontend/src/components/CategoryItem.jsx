@@ -42,18 +42,24 @@ const CarouselItem = ({ nomination, isSelected, order, onCheckboxChange }) => {
           height: "100%",
           display: "flex",
           alignItems: "center",
-          padding: "0.5rem",
           borderRadius: "2",
           backgroundColor: theme.palette.primary[50],
+          overflow: "visible",
+          position: "relative",
         }}
       >
         <CardMedia
           component={nomination.image ? "img" : "video"}
           sx={{
             height: "100%",
-            width: "25%",
-            objectFit: "contain",
-            backgroundColor: "inherit",
+            width: "18%",
+            minWidth: "100px",
+            objectFit: "cover",
+            borderRadius: "4px",
+            transition: "transform 0.3s ease",
+            "&:hover": {
+              transform: "scale(1.10)",
+            },
           }}
           src={mediaSrc}
           autoPlay
