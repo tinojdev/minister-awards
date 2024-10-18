@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -12,20 +12,61 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Header from "@/components/Header";
 import CarouselItem from "./CategoryItem";
+import {
+  useDeleteVoteMutation,
+  useGetVotesQuery,
+  usePostVoteMutation,
+} from "@/state/api";
 
 const Category = ({ id, name, nominations }) => {
   const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [votes, setVotes] = useState([]);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleCheckboxChange = (itemId) => {
-    const isSelected = selectedItems.includes(itemId);
+  const [postVote, postVoteResult] = usePostVoteMutation();
+  const [deleteVote, deleteVoteResult] = useDeleteVoteMutation();
 
-    if (isSelected) {
-      setSelectedItems((prev) => prev.filter((id) => id !== itemId));
-    } else if (selectedItems.length < 3) {
-      setSelectedItems((prev) => [...prev, itemId]);
+  const { data, error, isLoading, refetch } = useGetVotesQuery({
+    categoryId: id,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setVotes(data);
+    }
+  }, [data]);
+
+  const handleCheckboxChange = async (itemId) => {
+    const vote = votes.find((vote) => vote.nomination === itemId);
+
+    if (vote !== undefined) {
+      // Optimistic update
+      setVotes(votes.filter((v) => v.nomination !== itemId));
+      await deleteVote({ voteId: vote.id });
+      if (deleteVoteResult.error !== undefined) {
+        alert("Epääänestäminen epäonnistui!");
+        console.error(deleteVoteResult.error);
+      }
+      refetch();
+    } else if (votes.length < 3) {
+      // Optimistic update
+      setVotes([
+        ...votes,
+        { nomination: itemId, category: id, weight: votes.length + 1 },
+      ]);
+
+      await postVote({
+        categoryId: id,
+        nominationId: itemId,
+        weight: votes.length + 1,
+      });
+
+      if (postVoteResult.error !== undefined) {
+        alert("Äänestäminen epäonnistui!");
+        console.error(postVoteResult.error);
+      }
+      refetch();
     }
   };
 
@@ -60,8 +101,13 @@ const Category = ({ id, name, nominations }) => {
             >
               <CarouselItem
                 nomination={nomination}
-                isSelected={selectedItems.includes(nomination.id)}
-                order={selectedItems.indexOf(nomination.id) + 1}
+                isSelected={votes.some(
+                  (vote) => vote.nomination === nomination.id
+                )}
+                order={
+                  votes.findIndex((vote) => vote.nomination === nomination.id) +
+                  1
+                }
                 onCheckboxChange={handleCheckboxChange}
               />
             </Grid>

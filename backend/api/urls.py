@@ -22,10 +22,7 @@ urlpatterns = [
         views.NominationDetail.as_view(),
         name="nomination-detail",
     ),
-    path(
-        r"categories/<int:category_id>/nominations/<int:nomination_id>/vote",
-        views.VoteView.as_view(),
-        name="vote",
-    ),
+    path(r"votes/<int:vote_id>", views.VoteDetailView.as_view(), name="vote-detail"),
+    path(r"votes/", views.VoteListView.as_view(), name="vote-list"),
     path(r"voters/", views.VoterList.as_view(), name="voter-list"),
 ]

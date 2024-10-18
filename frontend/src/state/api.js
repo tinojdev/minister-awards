@@ -1,10 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   baseQuery: fetchBaseQuery({
+    headers: {
+      "Content-Type": "application/json",
+    },
     baseUrl: `${import.meta.env.VITE_BASE_API_URL}/`,
   }),
   reducerPath: "adminApi",
-  tagTypes: ["User"],
+  tagTypes: ["Vote"],
   endpoints: (build) => ({
     getNominationsByCategory: build.query({
       query: (categoryId) => `categories/${categoryId}/nominations/`,
@@ -15,9 +18,43 @@ export const api = createApi({
     getVoters: build.query({
       query: () => "voters/?getTotalPoints=true",
     }),
-    getVotesByNomination: build.query({
-      query: ({ categoryId, nominationId }) =>
-        `categories/${categoryId}/nominations/${nominationId}/vote`,
+    getVotes: build.query({
+      query: ({ categoryId, nominationId, onlyPersonalVotes }) => {
+        return {
+          params: {
+            categoryId: categoryId,
+            nominationId: nominationId,
+            onlyPersonalVotes: onlyPersonalVotes,
+          },
+
+          url: `votes/`,
+        };
+      },
+      providesTags: ["Vote"],
+    }),
+    postVote: build.mutation({
+      query: ({ categoryId, nominationId, weight }) => {
+        return {
+          url: `votes/`,
+          method: "POST",
+          body: {
+            category: categoryId,
+            nomination: nominationId,
+            voter: "Tino",
+            weight: weight,
+          },
+        };
+      },
+      invalidatesTags: ["Vote"],
+    }),
+    deleteVote: build.mutation({
+      query: ({ voteId }) => {
+        return {
+          url: `votes/${voteId}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Vote"],
     }),
   }),
 });
@@ -27,4 +64,7 @@ export const {
   useGetCategoriesQuery,
   useGetVotersQuery,
   useGetVotesByNominationQuery,
+  useGetVotesQuery,
+  usePostVoteMutation,
+  useDeleteVoteMutation,
 } = api;
