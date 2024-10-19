@@ -78,10 +78,11 @@ const Home = () => {
       <Box
         sx={{
           position: "sticky",
-          top: showNavbar ? 64 : 0,
+          top: showNavbar ? 55 : 0,
           zIndex: 1100,
           padding: isNonMobile ? "0 2rem" : "0 0 0 0.25rem",
-          backgroundColor: alpha(theme.palette.primary[0], 0),
+          backgroundColor: isNonMobile ? alpha(theme.palette.primary[0], 0) : alpha(theme.palette.primary[0], 0.5),
+          backdropFilter:  isNonMobile? "none" : "blur(10px)",
           boxShadow: "none",
         }}
       >

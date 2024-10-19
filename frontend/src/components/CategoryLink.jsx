@@ -1,5 +1,5 @@
 import { useGetCategoriesQuery } from "@/state/api";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Carousel from "react-multi-carousel";
@@ -10,6 +10,7 @@ import { alpha } from "@mui/material";
 
 export default function CategoryLink({ isSticky }) {
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -51,7 +52,7 @@ export default function CategoryLink({ isSticky }) {
             {data.map((category) => (
               <Box
                 key={category.id}
-                padding="4px"
+                padding= {isSmallScreen ? "8px" : "5px"}
                 borderRadius="6px"
                 sx={{
                   backgroundColor: alpha(theme.palette.primary[100], 0.5), // Add transparency to the background
