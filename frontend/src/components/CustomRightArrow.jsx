@@ -11,7 +11,6 @@ const CustomRightArrow = ({ onClick, isSticky }) => {
         top: 0,
         width: "100px",
         height: "100%",
-        borderRadius: "16px",
         background: isSticky
           ? "transparent"
           : "linear-gradient(to left, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 100%)",

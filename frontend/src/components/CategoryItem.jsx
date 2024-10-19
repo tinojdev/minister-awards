@@ -31,6 +31,13 @@ const CarouselItem = ({
   const handleChange = () => {
     onCheckboxChange(nomination.id);
   };
+  const isIOS = () => {
+    return (
+      typeof window !== "undefined" &&
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !window.MSStream
+    );
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -70,7 +77,7 @@ const CarouselItem = ({
             },
           }}
           src={mediaSrc}
-          autoPlay
+          autoPlay={!isIOS()}
           muted
           loop
           onClick={handleOpen}
@@ -131,7 +138,7 @@ const CarouselItem = ({
           {/* Enlarged image */}
           {mediaSrc.endsWith(".mp4") ? (
             <video
-              autoPlay
+              autoPlay={!isIOS()}
               loop
               style={{
                 width: "70vw",
