@@ -6,8 +6,9 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CustomLeftArrow from "./CustomLeftArrow";
 import CustomRightArrow from "./CustomRightArrow";
+import { alpha } from "@mui/material";
 
-export default function CategoryLink() {
+export default function CategoryLink({ isSticky }) {
   const theme = useTheme();
   const responsive = {
     superLargeDesktop: {
@@ -37,13 +38,13 @@ export default function CategoryLink() {
   }, []);
 
   return (
-    <Box mt="1rem" mb="1rem" className="carousel-container carousel-fade">
+    <Box margin=" 1rem auto" className="carousel-container carousel-fade" maxWidth={1000}>
       {data && (
         <div>
           <Carousel
             responsive={responsive}
-            customLeftArrow={<CustomLeftArrow />}
-            customRightArrow={<CustomRightArrow />}
+            customLeftArrow={<CustomLeftArrow isSticky={isSticky}/>}
+            customRightArrow={<CustomRightArrow isSticky={isSticky} />}
             removeArrowOnDeviceType={["mobile"]}
             partialVisible={false}
           >
@@ -53,7 +54,9 @@ export default function CategoryLink() {
                 padding="4px"
                 borderRadius="6px"
                 sx={{
-                  backgroundColor: theme.palette.primary[100],
+                  backgroundColor: alpha(theme.palette.primary[100], 0.5), // Add transparency to the background
+                  backdropFilter: "blur(10px)",
+                  boxShadow: "none",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",

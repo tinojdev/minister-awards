@@ -1,21 +1,16 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import {
   Box,
-  Skeleton,
+  Typography,
   useTheme,
   useMediaQuery,
-  Typography,
 } from "@mui/material";
 import { useGetCategoriesQuery } from "@/state/api";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import Header from "@/components/Header";
-import Test from "@/components/Test";
+import { useOutletContext } from "react-router-dom";
 import Category from "@/components/Category";
-import { useState } from "react";
-import TopUsersTable from "@/components/TopUsers";
-import Wait from "../waiting_page/WaitingPage";
 import CategoryLink from "@/components/CategoryLink";
+import { alpha } from "@mui/material";
+import Wait from "../waiting_page/WaitingPage";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
@@ -23,6 +18,35 @@ const Home = () => {
   const [selections, setSelections] = useState({});
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
+  const [isSticky, setIsSticky] = useState(false)
+
+  // Get the scrollContainerRef from the Outlet context
+  const { showNavbar, scrollContainerRef } = useOutletContext();
+
+
+  const handleScroll = () => {
+    const currentScrollY = scrollContainerRef?.current?.scrollTop || 0;
+    if (currentScrollY > 280) {
+      setIsSticky(true)
+    } else {
+      setIsSticky(false)
+    }
+  };
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    
+    // Ensure the scrollContainer exists before adding the event listener
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [scrollContainerRef]);
 
   const handleSelectionChange = (carouselId, itemId) => {
     setSelections((prevSelections) => ({
@@ -34,42 +58,44 @@ const Home = () => {
   if (isLoading) {
     return (
       <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
-        <Box maxWidth={1000} margin="0 auto">
-          <Test />
-          <Test />
-          <Test />
-        </Box>
+        {/* Render loading skeleton */}
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Box
-        padding="2rem"
-        sx={{
-          backgroundColor: theme.palette.primary[0],
-        }}
-      >
+      <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
         <Typography variant="h3">{error.status}</Typography>
         <Typography variant="body2">{error.error}</Typography>
       </Box>
     );
   }
+
   return (
-    <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
+    <Box sx={{ backgroundColor: theme.palette.primary[0] }}>
       <Wait />
-      <Box maxWidth={1000} margin="0 auto">
-        <CategoryLink />
+      <Box
+        sx={{
+          position: "sticky",
+          top: showNavbar ? 64 : 0,
+          zIndex: 1100,
+          padding: "0 2rem",
+          backgroundColor: alpha(theme.palette.primary[0], 0),
+          boxShadow: "none",
+        }}
+      >
+        <CategoryLink isSticky={isSticky} />
       </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: isNonMobile ? "row" : "column",
+          padding: "2rem",
         }}
       >
         <Box maxWidth={1000} margin="0 auto">
-          {data.map((category) => (
+          {data.map((category, index) => (
             <Category
               key={category.id}
               id={category.id}
@@ -78,6 +104,7 @@ const Home = () => {
               isLoading={isLoading}
               selectedId={selections[category.id]}
               onSelectionChange={handleSelectionChange}
+              index={index}
             />
           ))}
         </Box>

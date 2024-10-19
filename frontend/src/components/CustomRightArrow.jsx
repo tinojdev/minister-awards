@@ -2,7 +2,7 @@ import React from "react";
 import { Box, IconButton } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const CustomRightArrow = ({ onClick }) => {
+const CustomRightArrow = ({ onClick, isSticky }) => {
   return (
     <Box
       style={{
@@ -11,8 +11,10 @@ const CustomRightArrow = ({ onClick }) => {
         top: 0,
         width: "100px",
         height: "100%",
-        background:
-          "linear-gradient(to left, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 100%)",
+        borderRadius: "16px",
+        background: isSticky
+          ? "transparent"
+          : "linear-gradient(to left, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 100%)",
       }}
     >
       <IconButton

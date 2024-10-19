@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -6,7 +6,6 @@ import {
   Icon,
   useMediaQuery,
   useTheme,
-  Skeleton
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -17,8 +16,9 @@ import {
   useGetVotesQuery,
   usePostVoteMutation,
 } from "@/state/api";
+import Tour from "reactour";
 
-const Category = ({ id, name, nominations }) => {
+const Category = ({ id, name, nominations, index }) => {
   const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
   const [votes, setVotes] = useState([]);
@@ -31,6 +31,20 @@ const Category = ({ id, name, nominations }) => {
     categoryId: id,
   });
 
+  const [isTourOpen, setIsTourOpen] = useState(false);
+
+  const steps = [
+    {
+      selector: '[data-tour="checkbox-0"]',
+      content:
+        "Rastita kolme valintaruutua per kategoria tärkeysjärjestyksessä äänestääksesi.",
+    },
+    {
+      selector: '[data-tour="media-0"]',
+      content: "Klikkaa tästä suurentaaksesi kuvan tai videon.",
+    },
+  ];
+
   useEffect(() => {
     if (data) {
       setVotes(data);
@@ -41,7 +55,6 @@ const Category = ({ id, name, nominations }) => {
     const vote = votes.find((vote) => vote.nomination === itemId);
 
     if (vote !== undefined) {
-      // Optimistic update
       setVotes(votes.filter((v) => v.nomination !== itemId));
       await deleteVote({ voteId: vote.id });
       if (deleteVoteResult.error !== undefined) {
@@ -50,7 +63,6 @@ const Category = ({ id, name, nominations }) => {
       }
       refetch();
     } else if (votes.length < 3) {
-      // Optimistic update
       setVotes([
         ...votes,
         { nomination: itemId, category: id, weight: votes.length + 1 },
@@ -70,8 +82,21 @@ const Category = ({ id, name, nominations }) => {
     }
   };
 
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem("hasSeenTour");
+
+    if (!hasSeenTour) {
+      setIsTourOpen(true);
+    }
+  }, []);
+
   const handleButtonClick = () => {
     setShowmore((prevState) => !prevState);
+  };
+
+  const handleTourClose = () => {
+    localStorage.setItem("hasSeenTour", "true");
+    setIsTourOpen(false);
   };
 
   const itemsToShow = showmore
@@ -79,14 +104,23 @@ const Category = ({ id, name, nominations }) => {
     : isSmallScreen
     ? nominations.slice(0, 3)
     : nominations.slice(0, 4);
+
   return (
     <Box marginBottom="2rem" width="100%" maxWidth="none">
+      {index === 0 && (
+        <Tour
+          steps={steps}
+          isOpen={isTourOpen}
+          onRequestClose={handleTourClose}
+          className="custom-tour"
+        />
+      )}
       <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
         <Header id={id} title={name} />
       </Box>
       <Box width="100%">
         <Grid container spacing={2} width="100%">
-          {itemsToShow.map((nomination) => (
+          {itemsToShow.map((nomination, index) => (
             <Grid
               item
               xs={12}
@@ -95,7 +129,7 @@ const Category = ({ id, name, nominations }) => {
               lg={6}
               key={nomination.id}
               sx={{
-                maxHeight: "100px",
+                height: "auto",
                 width: !isSmallScreen ? "300px" : "auto",
               }}
             >
@@ -109,6 +143,7 @@ const Category = ({ id, name, nominations }) => {
                   1
                 }
                 onCheckboxChange={handleCheckboxChange}
+                index={index}
               />
             </Grid>
           ))}
