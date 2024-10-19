@@ -80,7 +80,7 @@ const Home = () => {
           position: "sticky",
           top: showNavbar ? 64 : 0,
           zIndex: 1100,
-          padding: "0 2rem",
+          padding: isNonMobile ? "0 2rem" : "0 0 0 0.25rem",
           backgroundColor: alpha(theme.palette.primary[0], 0),
           boxShadow: "none",
         }}
