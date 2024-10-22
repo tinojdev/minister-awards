@@ -3,13 +3,23 @@ import "./App.css";
 import Home from "/src/scenes/home/Home";
 import Wait from "/src/scenes/waiting_page/WaitingPage";
 import Leaderboard from "/src/scenes/leaderboard/Leaderboard";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import CategoriesScene from "./scenes/categories/Categories";
 import Layout from "/src/scenes/layout/Layout";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "/src/theme";
 import CategoryLink from "./components/CategoryLink";
+
+function SavePersonalId() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  if (searchParams.has("personalId")) {
+    const id = searchParams.get("personalId");
+    window.localStorage.setItem("personalId", JSON.stringify(id));
+  }
+  return <Navigate to={`/home`} replace />;
+}
 
 function App() {
   const theme = createTheme(themeSettings);
@@ -21,7 +31,7 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/" element={<SavePersonalId />} />
               <Route path="/home" element={<Home />} />
               <Route path="/waiting-page" element={<Wait />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
