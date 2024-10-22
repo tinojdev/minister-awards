@@ -13,8 +13,11 @@ import CategoryLink from "./components/CategoryLink";
 
 function SavePersonalId() {
   const location = useLocation();
-  const id = new URLSearchParams(location.search).get("personalId");
-  window.localStorage.setItem("personalId", JSON.stringify(id));
+  const searchParams = new URLSearchParams(location.search);
+  if (searchParams.has("personalId")) {
+    const id = searchParams.get("personalId");
+    window.localStorage.setItem("personalId", JSON.stringify(id));
+  }
   return <Navigate to={`/home`} replace />;
 }
 
