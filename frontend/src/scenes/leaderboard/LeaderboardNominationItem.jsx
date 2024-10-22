@@ -9,7 +9,7 @@ import {
   IconButton,
   Modal,
 } from "@mui/material";
-import { useGetVotesByNominationQuery } from "@/state/api";
+import { useGetVotesQuery } from "@/state/api";
 import CloseIcon from "@mui/icons-material/Close";
 import { alpha } from "@mui/material";
 
@@ -18,7 +18,7 @@ export const LeaderboardNominationItem = ({ nomination }) => {
     data: votesData,
     error: votesError,
     isLoading: isLoadingVotes,
-  } = useGetVotesByNominationQuery({
+  } = useGetVotesQuery({
     categoryId: nomination.category,
     nominationId: nomination.id,
   });

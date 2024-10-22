@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -11,25 +11,92 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Header from "@/components/Header";
 import CarouselItem from "./CategoryItem";
+import {
+  useDeleteVoteMutation,
+  useGetVotesQuery,
+  usePostVoteMutation,
+} from "@/state/api";
+import Tour from "reactour";
 
-const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
+const Category = ({ id, name, nominations, index }) => {
   const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [votes, setVotes] = useState([]);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleCheckboxChange = (itemId) => {
-    const isSelected = selectedItems.includes(itemId);
+  const [postVote, postVoteResult] = usePostVoteMutation();
+  const [deleteVote, deleteVoteResult] = useDeleteVoteMutation();
 
-    if (isSelected) {
-      setSelectedItems((prev) => prev.filter((id) => id !== itemId));
-    } else if (selectedItems.length < 3) {
-      setSelectedItems((prev) => [...prev, itemId]);
+  const { data, error, isLoading, refetch } = useGetVotesQuery({
+    categoryId: id,
+  });
+
+  const [isTourOpen, setIsTourOpen] = useState(false);
+
+  const steps = [
+    {
+      selector: '[data-tour="checkbox-0"]',
+      content:
+        "Rastita kolme valintaruutua per kategoria tärkeysjärjestyksessä äänestääksesi.",
+    },
+    {
+      selector: '[data-tour="media-0"]',
+      content: "Klikkaa tästä suurentaaksesi kuvan tai videon.",
+    },
+  ];
+
+  useEffect(() => {
+    if (data) {
+      setVotes(data);
+    }
+  }, [data]);
+
+  const handleCheckboxChange = async (itemId) => {
+    const vote = votes.find((vote) => vote.nomination === itemId);
+
+    if (vote !== undefined) {
+      setVotes(votes.filter((v) => v.nomination !== itemId));
+      await deleteVote({ voteId: vote.id });
+      if (deleteVoteResult.error !== undefined) {
+        alert("Epääänestäminen epäonnistui!");
+        console.error(deleteVoteResult.error);
+      }
+      refetch();
+    } else if (votes.length < 3) {
+      setVotes([
+        ...votes,
+        { nomination: itemId, category: id, weight: votes.length + 1 },
+      ]);
+
+      await postVote({
+        categoryId: id,
+        nominationId: itemId,
+        weight: votes.length + 1,
+      });
+
+      if (postVoteResult.error !== undefined) {
+        alert("Äänestäminen epäonnistui!");
+        console.error(postVoteResult.error);
+      }
+      refetch();
     }
   };
 
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem("hasSeenTour");
+
+    if (!hasSeenTour) {
+      setIsTourOpen(true);
+    }
+  }, []);
+
   const handleButtonClick = () => {
     setShowmore((prevState) => !prevState);
+  };
+
+  const handleTourClose = () => {
+    localStorage.setItem("hasSeenTour", "true");
+    setIsTourOpen(false);
   };
 
   const itemsToShow = showmore
@@ -40,12 +107,20 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
 
   return (
     <Box marginBottom="2rem" width="100%" maxWidth="none">
+      {index === 0 && (
+        <Tour
+          steps={steps}
+          isOpen={isTourOpen}
+          onRequestClose={handleTourClose}
+          className="custom-tour"
+        />
+      )}
       <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
         <Header id={id} title={name} />
       </Box>
       <Box width="100%">
         <Grid container spacing={2} width="100%">
-          {itemsToShow.map((nomination) => (
+          {itemsToShow.map((nomination, index) => (
             <Grid
               item
               xs={12}
@@ -54,15 +129,21 @@ const Category = ({ id, name, nominations, selectedId, onSelectionChange }) => {
               lg={6}
               key={nomination.id}
               sx={{
-                maxHeight: '100px',
-                width: !isSmallScreen ? "300px" : "auto"
+                height: "auto",
+                width: !isSmallScreen ? "300px" : "auto",
               }}
             >
               <CarouselItem
                 nomination={nomination}
-                isSelected={selectedItems.includes(nomination.id)}
-                order={selectedItems.indexOf(nomination.id) + 1}
+                isSelected={votes.some(
+                  (vote) => vote.nomination === nomination.id
+                )}
+                order={
+                  votes.findIndex((vote) => vote.nomination === nomination.id) +
+                  1
+                }
                 onCheckboxChange={handleCheckboxChange}
+                index={index}
               />
             </Grid>
           ))}

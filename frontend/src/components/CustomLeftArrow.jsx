@@ -2,7 +2,9 @@ import React from "react";
 import { Box, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const CustomLeftArrow = ({ onClick }) => {
+const CustomLeftArrow = ({ onClick, isSticky }) => {
+  console.log(" 🤓 ~ CustomLeftArrow ~ isSticky:", isSticky)
+  
   return (
     <Box
       style={{
@@ -11,8 +13,10 @@ const CustomLeftArrow = ({ onClick }) => {
         top: 0,
         width: "100px",
         height: "100%",
-        background:
-          "linear-gradient(to right, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 100%)",
+        background: isSticky
+          ? "transparent"
+          : "linear-gradient(to right, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 100%)", // More transparent when sticky
+        transition: "background 0.3s ease",
       }}
     >
       <IconButton

@@ -45,7 +45,6 @@ const Sidebar = ({
   setIsSidebarOpen,
   isNonMobile,
 }) => {
-  console.log("🚀 ~ isSidebarOpen:", isSidebarOpen);
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
   const navigate = useNavigate();

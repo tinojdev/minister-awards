@@ -7,8 +7,8 @@ const Uncheckedbox = () => {
     <Box
       sx={{
         border: "2px solid",
-        width: "17px",
-        height: "17px",
+        width: "20px",
+        height: "20px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

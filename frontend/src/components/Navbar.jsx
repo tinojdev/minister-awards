@@ -3,6 +3,7 @@ import MryLogo from "@/assets/mryawards.png";
 import { Box, AppBar, Toolbar, IconButton, useTheme } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { alpha } from "@mui/material";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const theme = useTheme();
@@ -10,7 +11,8 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     <AppBar
       sx={{
         position: "static",
-        background: theme.palette.primary[0],
+        backgroundColor: alpha(theme.palette.primary[0], 0.5), // Add transparency to the background
+        backdropFilter: "blur(10px)",
         boxShadow: "none",
       }}
     >
