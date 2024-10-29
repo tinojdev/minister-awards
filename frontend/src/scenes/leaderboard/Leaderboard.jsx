@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useGetCategoriesQuery, useGetVotersQuery } from "@/state/api";
 import { LeaderboardNominationItem } from "./LeaderboardNominationItem";
+import Pedestal from "@/components/Pedestal";
 
 const Leaderboard = () => {
   // Fetch categories and voters
@@ -22,7 +23,7 @@ const Leaderboard = () => {
     error: votersError,
     isLoading: isLoadingVoters,
   } = useGetVotersQuery();
-
+  
   // Use fallback to ensure voters is an array
   const sortedVoters = Array.isArray(voters)
     ? [...voters].sort((a, b) => b.total_points - a.total_points)
@@ -39,6 +40,9 @@ const Leaderboard = () => {
 
   return (
     <Box sx={{ padding: 4 }}>
+      <Box>
+        <Pedestal top3={sortedVoters.slice(0,3)} />
+      </Box>
       {/* Loop over categories */}
       {categories.map((c) => (
         <Box key={c.id} sx={{ marginBottom: 4 }}>

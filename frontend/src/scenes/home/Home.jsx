@@ -78,7 +78,9 @@ const Home = () => {
       <Box
         sx={{
           position: "sticky",
-          top: showNavbar ? 55 : 0,
+          top: showNavbar 
+          ? (isNonMobile ? 59 : 55) 
+          : 0,
           zIndex: 1100,
           padding: isNonMobile ? "0 2rem" : "0 0 0 0.25rem",
           backgroundColor: isNonMobile ? alpha(theme.palette.primary[0], 0) : alpha(theme.palette.primary[0], 0.5),

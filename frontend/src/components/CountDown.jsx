@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
 
 function CountDown() {
-  const [countdownText, setCountdownText] = useState("Äänestyksen alkuun");
+  const [countdownText, setCountdownText] = useState("Äänestykseen");
   const [distance, setDistance] = useState(endDate - new Date().getTime());
 
   const theme = useTheme();
