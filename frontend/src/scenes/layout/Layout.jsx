@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Box, useMediaQuery } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import { getLocalStorageState } from "@/utils/utils";
 import { useTheme } from "@mui/material";
 
 const Layout = () => {
@@ -13,7 +14,6 @@ const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollY = useRef(0);
   const scrollContainerRef = useRef(null);
-
 
   const handleScroll = () => {
     const currentScrollY = scrollContainerRef.current?.scrollTop || 0;
@@ -37,7 +37,7 @@ const Layout = () => {
     }
 
     if (isNonMobile) {
-      setShowNavbar(true)
+      setShowNavbar(true);
     }
 
     return () => {
@@ -46,7 +46,9 @@ const Layout = () => {
       }
     };
   }, [isNonMobile]);
-
+  if (getLocalStorageState("personalId") === null) {
+    return <Navigate to={`/invalid-authentication`} />;
+  }
   return (
     <Box
       display="flex"

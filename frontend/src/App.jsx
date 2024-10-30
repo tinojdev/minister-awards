@@ -3,13 +3,21 @@ import "./App.css";
 import Home from "/src/scenes/home/Home";
 import Wait from "/src/scenes/waiting_page/WaitingPage";
 import Leaderboard from "/src/scenes/leaderboard/Leaderboard";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  Outlet,
+} from "react-router-dom";
 import CategoriesScene from "./scenes/categories/Categories";
 import Layout from "/src/scenes/layout/Layout";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider, Typography } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "/src/theme";
-import CategoryLink from "./components/CategoryLink";
+import { getLocalStorageState } from "./utils/utils";
+import InvalidAuthentication from "./scenes/invalidAuthentication/InvalidAuthentication";
 
 function SavePersonalId() {
   const location = useLocation();
@@ -37,6 +45,10 @@ function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/categories" element={<CategoriesScene />} />
             </Route>
+            <Route
+              path="/invalid-authentication"
+              element={<InvalidAuthentication />}
+            />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

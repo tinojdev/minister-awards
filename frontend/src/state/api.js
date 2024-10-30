@@ -1,8 +1,10 @@
+import { getLocalStorageState } from "@/utils/utils";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     headers: {
       "Content-Type": "application/json",
+      "X-Personal-Id": getLocalStorageState("personalId"),
     },
     baseUrl: `${import.meta.env.VITE_BASE_API_URL}/`,
   }),

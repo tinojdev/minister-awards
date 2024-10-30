@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +43,11 @@ else:
 CORS_ORIGIN_ALLOW_ALL = (
     os.getenv("DJANGO_CORS_ORIGIN_ALLOW_ALL", "false").lower() == "true"
 )
+
+CORS_ALLOW_HEADERS = [
+    *default_headers,
+    "X-Personal-Id",
+]
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
