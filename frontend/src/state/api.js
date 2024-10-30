@@ -5,8 +5,8 @@ export const api = createApi({
     headers: {
       "Content-Type": "application/json",
     },
-    prepareHeaders: {
-      "X-Personal-Id": getLocalStorageState("personalId"),
+    prepareHeaders: (headers) => {
+      headers.append("X-Personal-Id", getLocalStorageState("personalId"));
     },
     baseUrl: `${import.meta.env.VITE_BASE_API_URL}/`,
   }),
