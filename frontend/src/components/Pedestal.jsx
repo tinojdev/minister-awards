@@ -9,7 +9,7 @@ const Pedestal = ({ top3 }) => {
 
   let slideUp = keyframes`
   0% {
-    transform: translateY(53%);
+    transform: translateY(41.5%);
     opacity: 1;
   }
   100% {
@@ -17,7 +17,7 @@ const Pedestal = ({ top3 }) => {
     opacity: 1;
   }
 `;
-let slideUp2 = keyframes`
+  let slideUp2 = keyframes`
   0% {
     transform: translateY(30%);
     opacity: 1;
@@ -27,9 +27,9 @@ let slideUp2 = keyframes`
     opacity: 1;
   }
 `;
-let slideUp3 = keyframes`
+  let slideUp3 = keyframes`
   0% {
-    transform: translateY(54.5%);
+    transform: translateY(36%);
     opacity: 1;
   }
   100% {
@@ -37,7 +37,7 @@ let slideUp3 = keyframes`
     opacity: 1;
   }
 `;
-let slideUp4 = keyframes`
+  let slideUp4 = keyframes`
   0% {
     transform: translateY(24%);
     opacity: 1;
@@ -47,9 +47,9 @@ let slideUp4 = keyframes`
     opacity: 1;
   }
 `;
-let slideUp5 = keyframes`
+  let slideUp5 = keyframes`
   0% {
-    transform: translateY(53%);
+    transform: translateY(40%);
     opacity: 1;
   }
   100% {
@@ -57,7 +57,7 @@ let slideUp5 = keyframes`
     opacity: 1;
   }
 `;
-let slideUp6 = keyframes`
+  let slideUp6 = keyframes`
   0% {
     transform: translateY(36%);
     opacity: 1;
@@ -69,10 +69,9 @@ let slideUp6 = keyframes`
 `;
 
   if (isXsmallScreen) {
-
-   slideUp = keyframes`
+    slideUp = keyframes`
     0% {
-      transform: translateY(35%);
+      transform: translateY(24.5%);
       opacity: 1;
     }
     100% {
@@ -80,7 +79,7 @@ let slideUp6 = keyframes`
       opacity: 1;
     }
   `;
-   slideUp2 = keyframes`
+    slideUp2 = keyframes`
     0% {
       transform: translateY(30%);
       opacity: 1;
@@ -90,9 +89,9 @@ let slideUp6 = keyframes`
       opacity: 1;
     }
   `;
-   slideUp3 = keyframes`
+    slideUp3 = keyframes`
     0% {
-      transform: translateY(35%);
+      transform: translateY(24.5%);
       opacity: 1;
     }
     100% {
@@ -100,7 +99,7 @@ let slideUp6 = keyframes`
       opacity: 1;
     }
   `;
-   slideUp4 = keyframes`
+    slideUp4 = keyframes`
     0% {
       transform: translateY(24%);
       opacity: 1;
@@ -110,9 +109,9 @@ let slideUp6 = keyframes`
       opacity: 1;
     }
   `;
-   slideUp5 = keyframes`
+    slideUp5 = keyframes`
     0% {
-      transform: translateY(37%);
+      transform: translateY(37.5%);
       opacity: 1;
     }
     100% {
@@ -120,7 +119,7 @@ let slideUp6 = keyframes`
       opacity: 1;
     }
   `;
-   slideUp6 = keyframes`
+    slideUp6 = keyframes`
     0% {
       transform: translateY(36%);
       opacity: 1;
@@ -131,7 +130,7 @@ let slideUp6 = keyframes`
     }
   `;
   }
-  
+
   if (isXsmallScreen) {
     return (
       <Box
@@ -150,7 +149,7 @@ let slideUp6 = keyframes`
         >
           <Box
             width="100%"
-            height="70px"
+            height="100px"
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -162,7 +161,7 @@ let slideUp6 = keyframes`
               animation: `${slideUp} 0.8s ease-out`,
             }}
           >
-            <Typography fontWeight="bold" position="absolute" top="15%">
+            <Typography mt="1rem" fontWeight="bold" position="absolute" top="15%" fontSize="25px">
               {top3[1].first_name}
             </Typography>
             <Box
@@ -175,7 +174,7 @@ let slideUp6 = keyframes`
                 backgroundColor: "silver",
                 borderRadius: "10px",
                 position: "absolute",
-                top: "33px",
+                top: "65px",
               }}
             >
               <Icon>
@@ -187,11 +186,16 @@ let slideUp6 = keyframes`
             width="100%"
             sx={{
               height: "80px",
-              backgroundColor: theme.palette.secondary[600],
+              background: `linear-gradient(to bottom, ${theme.palette.secondary[600]} 0%, ${theme.palette.secondary[400]} 55%, ${theme.palette.primary[0]} 100%)`,
               animation: `${slideUp2} 0.8s ease-out`,
             }}
           >
-            <Typography mt="1rem" fontSize="12px" fontWeight="bold" color="white">
+            <Typography
+              mt="1rem"
+              fontSize="12px"
+              fontWeight="bold"
+              color="white"
+            >
               Total points: {top3[1].total_points}
             </Typography>
           </Box>
@@ -206,7 +210,7 @@ let slideUp6 = keyframes`
         >
           <Box
             width="100%"
-            height="70px"
+            height="100px"
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -218,7 +222,7 @@ let slideUp6 = keyframes`
               animation: `${slideUp3} 0.8s ease-out`,
             }}
           >
-            <Typography position="absolute" top="15%" fontWeight="bold">
+            <Typography mt="1rem" position="absolute" fontSize="35px" fontWeight="bold">
               {top3[0].first_name}
             </Typography>
             <Box
@@ -231,7 +235,7 @@ let slideUp6 = keyframes`
                 backgroundColor: "#C5A358",
                 borderRadius: "10px",
                 position: "absolute",
-                top: "33px",
+                top: "65px",
               }}
             >
               <Icon>
@@ -243,11 +247,16 @@ let slideUp6 = keyframes`
             width="100%"
             sx={{
               height: "100px",
-              backgroundColor: theme.palette.secondary[600],
+              background: `linear-gradient(to bottom, ${theme.palette.secondary[600]} 0%, ${theme.palette.secondary[400]} 55%, ${theme.palette.primary[0]} 100%)`,
               animation: `${slideUp4} 0.8s ease-out`,
             }}
           >
-            <Typography mt="1rem" fontSize="12px" fontWeight="bold" color="white">
+            <Typography
+              mt="1rem"
+              fontSize="12px"
+              fontWeight="bold"
+              color="white"
+            >
               Total points: {top3[0].total_points}
             </Typography>
           </Box>
@@ -274,7 +283,7 @@ let slideUp6 = keyframes`
               animation: `${slideUp5} 0.8s ease-out`,
             }}
           >
-            <Typography position="absolute" top="15%" fontWeight="bold">
+            <Typography position="absolute" fontSize="20px" fontWeight="bold">
               {top3[2].first_name}
             </Typography>
             <Box
@@ -300,11 +309,16 @@ let slideUp6 = keyframes`
             height="100px"
             sx={{
               height: "70px",
-              backgroundColor: theme.palette.secondary[600],
+              background: `linear-gradient(to bottom, ${theme.palette.secondary[600]} 0%, ${theme.palette.secondary[400]} 55%, ${theme.palette.primary[0]} 100%)`,
               animation: `${slideUp6} 0.8s ease-out`,
             }}
           >
-            <Typography mt="1rem" fontSize="12px" fontWeight="bold" color="white">
+            <Typography
+              mt="1rem"
+              fontSize="12px"
+              fontWeight="bold"
+              color="white"
+            >
               Total points: {top3[2].total_points}
             </Typography>
           </Box>
@@ -315,7 +329,7 @@ let slideUp6 = keyframes`
   return (
     <Box
       display="flex"
-      height="250px"
+      height="270px"
       maxWidth="800px"
       margin="0 auto 2rem auto"
     >
@@ -329,7 +343,7 @@ let slideUp6 = keyframes`
       >
         <Box
           width="100%"
-          height="70px"
+          height="90px"
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -341,7 +355,7 @@ let slideUp6 = keyframes`
             animation: `${slideUp} 0.8s ease-out`,
           }}
         >
-          <Typography mb="1rem" fontWeight="bold">
+          <Typography fontWeight="bold" fontSize="30px">
             {top3[1].first_name}
           </Typography>
           <Box
@@ -354,7 +368,7 @@ let slideUp6 = keyframes`
               backgroundColor: "silver",
               borderRadius: "10px",
               position: "absolute",
-              top: "30px",
+              top: "50px",
             }}
           >
             <Icon>
@@ -366,7 +380,7 @@ let slideUp6 = keyframes`
           width="100%"
           sx={{
             height: "120px",
-            backgroundColor: theme.palette.secondary[600],
+            background: `linear-gradient(to bottom, ${theme.palette.secondary[600]} 0%, ${theme.palette.secondary[400]} 55%, ${theme.palette.primary[0]} 100%)`,
             animation: `${slideUp2} 0.8s ease-out`,
           }}
         >
@@ -385,7 +399,7 @@ let slideUp6 = keyframes`
       >
         <Box
           width="100%"
-          height="70px"
+          height="100px"
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -397,7 +411,7 @@ let slideUp6 = keyframes`
             animation: `${slideUp3} 0.8s ease-out`,
           }}
         >
-          <Typography mb="1rem" fontWeight="bold">
+          <Typography mb="1rem" fontWeight="bold" fontSize="40px">
             {top3[0].first_name}
           </Typography>
           <Box
@@ -410,7 +424,7 @@ let slideUp6 = keyframes`
               backgroundColor: "#C5A358",
               borderRadius: "10px",
               position: "absolute",
-              top: "30px",
+              top: "60px",
             }}
           >
             <Icon>
@@ -422,7 +436,7 @@ let slideUp6 = keyframes`
           width="100%"
           sx={{
             height: "150px",
-            backgroundColor: theme.palette.secondary[600],
+            background: `linear-gradient(to bottom, ${theme.palette.secondary[600]} 0%, ${theme.palette.secondary[400]} 55%, ${theme.palette.primary[0]} 100%)`,
             animation: `${slideUp4} 0.8s ease-out`,
           }}
         >
@@ -441,7 +455,7 @@ let slideUp6 = keyframes`
       >
         <Box
           width="100%"
-          height="70px"
+          height="90px"
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -453,7 +467,7 @@ let slideUp6 = keyframes`
             animation: `${slideUp5} 0.8s ease-out`,
           }}
         >
-          <Typography mb="1rem" fontWeight="bold">
+          <Typography mt="0.5rem" fontWeight="bold" fontSize="25px">
             {top3[2].first_name}
           </Typography>
           <Box
@@ -466,7 +480,7 @@ let slideUp6 = keyframes`
               backgroundColor: "#A97142",
               borderRadius: "10px",
               position: "absolute",
-              top: "30px",
+              top: "50px",
             }}
           >
             <Icon>
@@ -479,7 +493,7 @@ let slideUp6 = keyframes`
           height="100px"
           sx={{
             height: "100px",
-            backgroundColor: theme.palette.secondary[600],
+            background: `linear-gradient(to bottom, ${theme.palette.secondary[600]} 0%, ${theme.palette.secondary[400]} 55%, ${theme.palette.primary[0]} 100%)`,
             animation: `${slideUp6} 0.8s ease-out`,
           }}
         >
