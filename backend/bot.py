@@ -92,9 +92,8 @@ async def dev(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     user = user[0]
 
-    target_url = "http://localhost:5173/?personalId="
+    message = f"http://localhost:5173/?personalId={user.personal_id}"
 
-    message = f"Pääset äänestämään <a href='{target_url}{user.personal_id}'>tästä</a>."
     await update.message.reply_text(message, parse_mode="HTML")
 
 
@@ -107,7 +106,6 @@ async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     categories = await get_categories()
     replied_to_message = update.message.reply_to_message
 
-    print(replied_to_message)
     if not replied_to_message:
         return -1
 
