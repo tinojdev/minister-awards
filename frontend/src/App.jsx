@@ -22,6 +22,7 @@ import InvalidAuthentication from "./scenes/invalidAuthentication/InvalidAuthent
 function SavePersonalId() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+
   if (searchParams.has("personalId")) {
     const id = searchParams.get("personalId");
     window.localStorage.setItem("personalId", JSON.stringify(id));
@@ -38,8 +39,8 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
+            <Route path="/" element={<SavePersonalId />} />
             <Route element={<Layout />}>
-              <Route path="/" element={<SavePersonalId />} />
               <Route path="/home" element={<Home />} />
               <Route path="/waiting-page" element={<Wait />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
