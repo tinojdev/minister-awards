@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, views
 from rest_framework.response import Response
 from django.http import Http404
-from django.db.models import Sum
+from django.db.models import Sum, F
 from django.db.models.functions import Coalesce
 from rest_framework.reverse import reverse
 
@@ -165,9 +165,13 @@ class VoteListView(views.APIView):
 
         try:
             if only_personal_votes:
-                votes = Vote.objects.filter(voter=request.voter, **filters)
+                votes = Vote.objects.filter(voter=request.voter, **filters).annotate(
+                    nominated_voter=F("nomination__nominated_voter")
+                )
             else:
-                votes = Vote.objects.filter(**filters)
+                votes = Vote.objects.filter(**filters).annotate(
+                    nominated_voter=F("nomination__nominated_voter")
+                )
             serializer = VoteSerializer(votes, many=True)
             return Response(serializer.data)
         except Vote.DoesNotExist:
