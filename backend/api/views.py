@@ -6,7 +6,7 @@ from django.db.models.functions import Coalesce
 from rest_framework.reverse import reverse
 
 from .models import Category, Nomination, Voter, Vote
-from .authentication import IsVoter, get_voter_from_token
+from .authentication import IsVoter
 from .serializers import (
     CategorySerializer,
     NominationSerializer,
@@ -43,6 +43,7 @@ class CategoryList(views.APIView):
     permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request):
+        print(request.voter)
         categories = Category.objects.all()
         serializer = self.serializer_class(categories, many=True)
         return Response(serializer.data)
@@ -164,8 +165,7 @@ class VoteListView(views.APIView):
 
         try:
             if only_personal_votes:
-                voter = get_voter_from_token(request)
-                votes = Vote.objects.filter(voter=voter, **filters)
+                votes = Vote.objects.filter(voter=request.voter, **filters)
             else:
                 votes = Vote.objects.filter(**filters)
             serializer = VoteSerializer(votes, many=True)
@@ -175,9 +175,10 @@ class VoteListView(views.APIView):
 
     def delete(self, request, category_id, nomination_id):
         try:
-            voter = get_voter_from_token(request)
             vote = Vote.objects.get(
-                category_id=category_id, nomination_id=nomination_id, voter=voter
+                category_id=category_id,
+                nomination_id=nomination_id,
+                voter=request.voter,
             )
             vote.delete()
             return Response({"message": "Vote removed"})
