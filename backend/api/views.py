@@ -40,7 +40,7 @@ class ApiRoot(views.APIView):
 
 class CategoryList(views.APIView):
     serializer_class = CategorySerializer
-    permission_classes = [IsVoter, permissions.IsAdminUser]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request):
         categories = Category.objects.all()
@@ -107,7 +107,7 @@ class VoterList(views.APIView):
     </pre>
     """
 
-    permission_classes = [IsVoter, permissions.IsAdminUser]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request):
         should_return_points = (
@@ -135,7 +135,7 @@ class VoteListView(views.APIView):
     weight: int
     """
 
-    permission_classes = [IsVoter, permissions.IsAdminUser]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def post(
         self,
@@ -186,7 +186,7 @@ class VoteListView(views.APIView):
 
 
 class VoteDetailView(views.APIView):
-    permission_classes = [IsVoter, permissions.IsAdminUser]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request, vote_id):
         try:
