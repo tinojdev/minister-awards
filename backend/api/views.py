@@ -43,7 +43,6 @@ class CategoryList(views.APIView):
     permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request):
-        print(request.voter)
         categories = Category.objects.all()
         serializer = self.serializer_class(categories, many=True)
         return Response(serializer.data)
