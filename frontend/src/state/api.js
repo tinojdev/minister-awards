@@ -74,6 +74,7 @@ export const {
   useGetVotes1Query,
   useGetVotesByNominationQuery,
   useGetVotesQuery,
+  useLazyGetVotesQuery,
   usePostVoteMutation,
   useDeleteVoteMutation,
 } = api;

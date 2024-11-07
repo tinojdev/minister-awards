@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Grid,
@@ -13,7 +13,7 @@ import Header from "@/components/Header";
 import CarouselItem from "./CategoryItem";
 import {
   useDeleteVoteMutation,
-  useGetVotesQuery,
+  useLazyGetVotesQuery,
   usePostVoteMutation,
 } from "@/state/api";
 import Tour from "reactour";
@@ -27,9 +27,16 @@ const Category = ({ id, name, nominations, index }) => {
   const [postVote, postVoteResult] = usePostVoteMutation();
   const [deleteVote, deleteVoteResult] = useDeleteVoteMutation();
 
-  const { data, error, isLoading, refetch } = useGetVotesQuery({
+  const [saveDelay, setSaveDelay] = useState(null);
+
+  const [trigger, result, lastPromiseInfo] = useLazyGetVotesQuery({
     categoryId: id,
   });
+
+  const cachedUpdateValuesFunction = useMemo(
+    () => updateVotesData(),
+    [updateVotesData]
+  );
 
   const [isTourOpen, setIsTourOpen] = useState(false);
 
@@ -45,50 +52,47 @@ const Category = ({ id, name, nominations, index }) => {
     },
   ];
 
-  useEffect(() => {
-    if (data) {
-      setVotes(data);
-    }
-  }, [data]);
+  async function updateVotesData() {
+    const votes = await trigger({ categoryId: id }).unwrap();
+    setVotes(votes);
+  }
 
   const handleCheckboxChange = async (itemId) => {
     const vote = votes.find((vote) => vote.nomination === itemId);
 
     if (vote !== undefined) {
-      setVotes(votes.filter((v) => v.nomination !== itemId));
-      await deleteVote({ voteId: vote.id });
-      if (deleteVoteResult.error !== undefined) {
+      try {
+        await deleteVote({ voteId: vote.id }).unwrap();
+      } catch (e) {
         alert("Epääänestäminen epäonnistui!");
-        console.error(deleteVoteResult.error);
+        console.error(e);
       }
-      refetch();
+      await updateVotesData();
     } else if (votes.length < 3) {
-      setVotes([
-        ...votes,
-        { nomination: itemId, category: id, weight: votes.length + 1 },
-      ]);
-
-      await postVote({
-        categoryId: id,
-        nominationId: itemId,
-        weight: votes.length + 1,
-      });
-
-      if (postVoteResult.error !== undefined) {
+      try {
+        await postVote({
+          categoryId: id,
+          nominationId: itemId,
+          weight: votes.length + 1,
+        }).unwrap();
+      } catch (e) {
         alert("Äänestäminen epäonnistui!");
-        console.error(postVoteResult.error);
+        console.error(e);
+        return;
       }
-      refetch();
+      await updateVotesData();
     }
   };
 
   useEffect(() => {
+    cachedUpdateValuesFunction;
+
     const hasSeenTour = localStorage.getItem("hasSeenTour");
 
     if (!hasSeenTour) {
       setIsTourOpen(true);
     }
-  }, []);
+  }, [cachedUpdateValuesFunction]);
 
   const handleButtonClick = () => {
     setShowmore((prevState) => !prevState);

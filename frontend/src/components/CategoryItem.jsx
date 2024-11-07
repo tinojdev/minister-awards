@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -12,8 +12,7 @@ import {
   IconButton,
   useMediaQuery,
 } from "@mui/material";
-import Checkedbox from "./Checkedbox";
-import Uncheckedbox from "./Uncheckedbox";
+import { LoadingCheckbox, TextCheckbox, Uncheckedbox } from "./Checkboxes";
 import CloseIcon from "@mui/icons-material/Close";
 import { alpha } from "@mui/material";
 
@@ -27,9 +26,17 @@ const CarouselItem = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isLoadingVotes, setIsLoadingVotes] = useState(false);
 
-  const handleChange = () => {
-    onCheckboxChange(nomination.id);
+  const handleChange = async () => {
+    if (isLoadingVotes === true) {
+      return;
+    }
+    setIsLoadingVotes(true);
+
+    await onCheckboxChange(nomination.id);
+
+    setIsLoadingVotes(false);
   };
 
   const handleOpen = () => setOpen(true);
@@ -84,10 +91,15 @@ const CarouselItem = ({
             display: "flex",
             alignItems: "start",
             justifyContent: "center",
-            flexDirection: "column"
+            flexDirection: "column",
           }}
         >
-          <Typography fontWeight="bold" gutterBottom variant="h2" component="div">
+          <Typography
+            fontWeight="bold"
+            gutterBottom
+            variant="h2"
+            component="div"
+          >
             {nomination.nomination_text}
             Test
           </Typography>
@@ -106,8 +118,14 @@ const CarouselItem = ({
           <Checkbox
             checked={isSelected}
             onChange={handleChange}
-            icon={<Uncheckedbox />}
-            checkedIcon={<Checkedbox order={order} />}
+            icon={isLoadingVotes ? <LoadingCheckbox /> : <Uncheckedbox />}
+            checkedIcon={
+              isLoadingVotes ? (
+                <LoadingCheckbox />
+              ) : (
+                <TextCheckbox text={order} />
+              )
+            }
             data-tour={index === 0 ? "checkbox-0" : undefined}
           />
         </CardActions>
