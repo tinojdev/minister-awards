@@ -39,6 +39,10 @@ const CarouselItem = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const mediaSrcThumbnail = `${import.meta.env.VITE_BASE_MEDIA_URL}${
+    nomination.image_thumbnail || nomination.video
+  }`;
+
   const mediaSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${
     nomination.image || nomination.video
   }`;
@@ -73,7 +77,7 @@ const CarouselItem = ({
               transform: "scale(1.10)",
             },
           }}
-          src={mediaSrc}
+          src={mediaSrcThumbnail}
           autoPlay
           muted
           loop

@@ -23,7 +23,7 @@ const DetailedStatsItem = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const mediaSrc = `${import.meta.env.VITE_BASE_MEDIA_URL}${
-    nomination.image || nomination.video
+    nomination.image_thumbnail || nomination.video
   }`;
   const precentage =
     Math.round((totalPointsPerNomination / totalPoints) * 100) || 0;
