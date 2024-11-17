@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Typography, List } from "@mui/material";
+import { Box, Typography, List, Button, Icon } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -15,12 +15,14 @@ import {
 import { LeaderboardNominationItem } from "../../components/LeaderboardNominationItem";
 import Pedestal from "@/components/Pedestal";
 import { useOutletContext } from "react-router-dom";
-
+import DetailedStats from "@/components/DetailedStats";
+import { useState } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const Leaderboard = () => {
-  // Fetch categories and voters
+  const [showmore, setShowmore] = useState(false);
   const { isSidebarOpen, showNavbar, scrollContainerRef } = useOutletContext();
-  console.log(" 🤓 ~ Leaderboard ~ isSidebarOpen:", isSidebarOpen)
   const {
     data: categories,
     error: categoryError,
@@ -38,6 +40,10 @@ const Leaderboard = () => {
     error: votesError,
     isLoading: isLoadingVotes,
   } = useGetVotes1Query();
+
+  const handleButtonClick = () => {
+    setShowmore((prevState) => !prevState);
+  };
 
   // Check if votes is defined before using it
   const groupVotes = (voteData) => {
@@ -81,8 +87,36 @@ const Leaderboard = () => {
   return (
     <Box sx={{ padding: 4 }}>
       <Box>
-        <Pedestal top3={sortedVoters.slice(0,3)} isSidebarOpen={isSidebarOpen} />
+        <Pedestal
+          top3={sortedVoters.slice(0, 3)}
+          isSidebarOpen={isSidebarOpen}
+        />
       </Box>
+      <Box maxWidth={1000} margin="0 auto" sx={{height: showmore ? "auto" : 0, overflow: "hidden"}}>
+        {categories.map((category, index) => {
+          const filteredVotes = votes?.filter(
+            (vote) => vote.category === category.id
+          );
+          return <DetailedStats category={category} votes={filteredVotes} />;
+        })}
+      </Box>
+      <Box display="flex" justifyContent="center" mt={2}>
+              <Button
+                onClick={handleButtonClick}
+                sx={{
+                  borderRadius: 5,
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "inherit",
+                  },
+                }}
+              >
+                {showmore ? "Näytä vähemmän" : "Näytä tarkat pistemäärät"}
+                <Icon sx={{ display: "flex" }}>
+                  {showmore ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </Icon>
+              </Button>
+        </Box>
       {/* Loop over categories */}
       {categories.map((c) => (
         <Box key={c.id} sx={{ marginBottom: 4 }}>
