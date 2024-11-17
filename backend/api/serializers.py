@@ -31,7 +31,19 @@ class VoterSerializer(serializers.ModelSerializer):
 
 
 class VoteSerializer(serializers.ModelSerializer):
+    nominated_voter = serializers.CharField(
+        read_only=True, required=False, allow_null=True
+    )
+
     class Meta:
         model = Vote
         required_fields = ["weight"]
-        fields = "__all__"
+        fields = [
+            "id",
+            "voter",
+            "nomination",
+            "category",
+            "weight",
+            "timestamp",
+            "nominated_voter",
+        ]

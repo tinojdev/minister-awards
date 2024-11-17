@@ -1,12 +1,12 @@
 from rest_framework import viewsets, permissions, views
 from rest_framework.response import Response
 from django.http import Http404
-from django.db.models import Sum
+from django.db.models import Sum, F
 from django.db.models.functions import Coalesce
 from rest_framework.reverse import reverse
 
 from .models import Category, Nomination, Voter, Vote
-from .authentication import IsVoter, get_voter_from_token
+from .authentication import IsVoter
 from .serializers import (
     CategorySerializer,
     NominationSerializer,
@@ -40,7 +40,7 @@ class ApiRoot(views.APIView):
 
 class CategoryList(views.APIView):
     serializer_class = CategorySerializer
-    permission_classes = [IsVoter]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request):
         categories = Category.objects.all()
@@ -107,7 +107,7 @@ class VoterList(views.APIView):
     </pre>
     """
 
-    permission_classes = [IsVoter]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request):
         should_return_points = (
@@ -135,7 +135,7 @@ class VoteListView(views.APIView):
     weight: int
     """
 
-    permission_classes = [IsVoter]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def post(
         self,
@@ -164,10 +164,13 @@ class VoteListView(views.APIView):
 
         try:
             if only_personal_votes:
-                voter = get_voter_from_token(request)
-                votes = Vote.objects.filter(voter=voter, **filters)
+                votes = Vote.objects.filter(voter=request.voter, **filters).annotate(
+                    nominated_voter=F("nomination__nominated_voter")
+                )
             else:
-                votes = Vote.objects.filter(**filters)
+                votes = Vote.objects.filter(**filters).annotate(
+                    nominated_voter=F("nomination__nominated_voter")
+                )
             serializer = VoteSerializer(votes, many=True)
             return Response(serializer.data)
         except Vote.DoesNotExist:
@@ -175,9 +178,10 @@ class VoteListView(views.APIView):
 
     def delete(self, request, category_id, nomination_id):
         try:
-            voter = get_voter_from_token(request)
             vote = Vote.objects.get(
-                category_id=category_id, nomination_id=nomination_id, voter=voter
+                category_id=category_id,
+                nomination_id=nomination_id,
+                voter=request.voter,
             )
             vote.delete()
             return Response({"message": "Vote removed"})
@@ -186,7 +190,7 @@ class VoteListView(views.APIView):
 
 
 class VoteDetailView(views.APIView):
-    permission_classes = [IsVoter]
+    permission_classes = [IsVoter | permissions.IsAdminUser]
 
     def get(self, request, vote_id):
         try:

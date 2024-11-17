@@ -71,6 +71,32 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(message, parse_mode="HTML")
 
 
+async def dev(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message.from_user.is_bot:
+        return
+    if update.message.chat.type != "private":
+        return
+
+    first_name = update.message.from_user.first_name
+    last_name = update.message.from_user.last_name
+    nickname = update.message.from_user.username
+    telegram_id = update.message.from_user.id
+
+    user = await Voter.objects.aupdate_or_create(
+        first_name=first_name,
+        defaults=dict(
+            last_name=last_name,
+            username=nickname,
+            telegram_id=telegram_id,
+        ),
+    )
+    user = user[0]
+
+    message = f"http://localhost:5173/?personalId={user.personal_id}"
+
+    await update.message.reply_text(message, parse_mode="HTML")
+
+
 @sync_to_async
 def get_categories():
     return list(Category.objects.all())
@@ -80,7 +106,6 @@ async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     categories = await get_categories()
     replied_to_message = update.message.reply_to_message
 
-    print(replied_to_message)
     if not replied_to_message:
         return -1
 
@@ -206,6 +231,7 @@ if __name__ == "__main__":
     application = ApplicationBuilder().token(token).persistence(persistence).build()
 
     application.add_handler(CommandHandler("join", join))
+    application.add_handler(CommandHandler("dev", dev))
 
     application.add_handler(CommandHandler("start", start))
 

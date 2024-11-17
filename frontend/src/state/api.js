@@ -36,6 +36,10 @@ export const api = createApi({
       },
       providesTags: ["Vote"],
     }),
+    getVotes1: build.query({
+      query: () => "votes/",
+      providesTags: ["Vote"],
+    }),
     postVote: build.mutation({
       query: ({ categoryId, nominationId, weight }) => {
         return {
@@ -67,6 +71,7 @@ export const {
   useGetNominationsByCategoryQuery,
   useGetCategoriesQuery,
   useGetVotersQuery,
+  useGetVotes1Query,
   useGetVotesByNominationQuery,
   useGetVotesQuery,
   usePostVoteMutation,
