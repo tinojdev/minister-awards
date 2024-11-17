@@ -99,77 +99,83 @@ const Category = ({ id, name, nominations, index }) => {
     setIsTourOpen(false);
   };
 
-  const itemsToShow = showmore
-    ? nominations
-    : isSmallScreen
-    ? nominations.slice(0, 3)
-    : nominations.slice(0, 4);
+    const itemsToShow = showmore
+      ? nominations
+      : isSmallScreen
+      ? nominations.slice(0, 3)
+      : nominations.slice(0, 4);
 
-  return (
-    <Box marginBottom="2rem" width="100%" maxWidth="none">
-      {index === 0 && (
-        <Tour
-          steps={steps}
-          isOpen={isTourOpen}
-          onRequestClose={handleTourClose}
-          className="custom-tour"
-        />
-      )}
-      <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
-        <Header id={id} title={name} />
-      </Box>
-      <Box width="100%">
-        <Grid container spacing={2} width="100%">
-          {itemsToShow.map((nomination, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={6}
-              lg={6}
-              key={nomination.id}
-              sx={{
-                height: "auto",
-                width: !isSmallScreen ? "300px" : "auto",
-              }}
-            >
-              <CarouselItem
-                nomination={nomination}
-                isSelected={votes.some(
-                  (vote) => vote.nomination === nomination.id
-                )}
-                order={
-                  votes.findIndex((vote) => vote.nomination === nomination.id) +
-                  1
-                }
-                onCheckboxChange={handleCheckboxChange}
-                index={index}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        {nominations.length > (isSmallScreen ? 3 : 4) && (
-          <Box display="flex" justifyContent="center" mt={2}>
-            <Button
-              onClick={handleButtonClick}
-              sx={{
-                borderRadius: 5,
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "inherit",
-                },
-              }}
-            >
-              {showmore ? "Näytä vähemmän" : "Näytä enemmän"}
-              <Icon sx={{ display: "flex" }}>
-                {showmore ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              </Icon>
-            </Button>
-          </Box>
+    return (
+      <Box marginBottom="2rem" width="100%" maxWidth="none">
+        {index === 0 && (
+          <Tour
+            steps={steps}
+            isOpen={isTourOpen}
+            onRequestClose={handleTourClose}
+            className="custom-tour"
+          />
         )}
+        <Box
+          display="flex"
+          alignItems="start"
+          marginBottom="0.5rem"
+          width="100%"
+        >
+          <Header id={id} title={name} />
+        </Box>
+        <Box width="100%">
+          <Grid container spacing={2} width="100%">
+            {itemsToShow.map((nomination, index) => (
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                lg={6}
+                key={nomination.id}
+                sx={{
+                  height: "auto",
+                  width: !isSmallScreen ? "300px" : "auto",
+                }}
+              >
+                <CarouselItem
+                  nomination={nomination}
+                  isSelected={votes.some(
+                    (vote) => vote.nomination === nomination.id
+                  )}
+                  order={
+                    votes.findIndex(
+                      (vote) => vote.nomination === nomination.id
+                    ) + 1
+                  }
+                  onCheckboxChange={handleCheckboxChange}
+                  index={index}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {nominations.length > (isSmallScreen ? 3 : 4) && (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <Button
+                onClick={handleButtonClick}
+                sx={{
+                  borderRadius: 5,
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "inherit",
+                  },
+                }}
+              >
+                {showmore ? "Näytä vähemmän" : "Näytä enemmän"}
+                <Icon sx={{ display: "flex" }}>
+                  {showmore ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </Icon>
+              </Button>
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
-  );
-};
+    );
+  }
 
 export default Category;

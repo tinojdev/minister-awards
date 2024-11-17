@@ -74,7 +74,7 @@ function CountDown() {
               Päivää
             </Typography>
           </Box>
-          <Divider flexItem orientation="vertical" sx={{ height: "2rem", mt:"1.5rem"}}/>
+          <Divider flexItem orientation="vertical" sx={{ height: "2rem", mt: isXsmallScreen ? "1rem" : "1.5rem"}}/>
           <Box mr="0.5rem" ml="0.5rem" height="100%">
             <Typography
               fontWeight="bold"
@@ -93,7 +93,7 @@ function CountDown() {
               Tuntia
             </Typography>
           </Box>
-          <Divider flexItem orientation="vertical" sx={{ height: "2rem", width: "px", mt:"1.5rem"}}/>
+          <Divider flexItem orientation="vertical" sx={{ height: "2rem", width: "px", mt: isXsmallScreen ? "1rem" : "1.5rem"}}/>
           <Box mr="0.5rem" ml="0.5rem">
             <Typography
               fontWeight="bold"
@@ -112,7 +112,7 @@ function CountDown() {
               Minuuttia
             </Typography>
           </Box>
-          <Divider flexItem orientation="vertical" sx={{ height: "2rem", width: "px", mt:"1.5rem"}}/>
+          <Divider flexItem orientation="vertical" sx={{ height: "2rem", width: "px", mt: isXsmallScreen ? "1rem" : "1.5rem"}}/>
           <Box ml="0.5rem">
             <Typography
               fontWeight="bold"

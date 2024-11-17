@@ -3,9 +3,10 @@ import { Box, Icon, Typography, useTheme, useMediaQuery } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { keyframes } from "@mui/system";
 
-const Pedestal = ({ top3 }) => {
+const Pedestal = ({ top3, isSidebarOpen }) => {
   const theme = useTheme();
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isLargeScreen = useMediaQuery("(min-width: 900px)");
 
   let slideUp = keyframes`
   0% {
@@ -131,7 +132,7 @@ const Pedestal = ({ top3 }) => {
   `;
   }
 
-  if (isXsmallScreen) {
+  if (isXsmallScreen || (isSidebarOpen && !isLargeScreen)) {
     return (
       <Box
         display="flex"
@@ -161,7 +162,14 @@ const Pedestal = ({ top3 }) => {
               animation: `${slideUp} 0.8s ease-out`,
             }}
           >
-            <Typography mt="1rem" fontWeight="bold" position="absolute" top="15%" fontSize="25px">
+            <Typography
+              mt="1rem"
+              padding="4px"
+              fontWeight="bold"
+              position="absolute"
+              top="15%"
+              fontSize="25px"
+            >
               {top3[1].first_name}
             </Typography>
             <Box
@@ -192,11 +200,12 @@ const Pedestal = ({ top3 }) => {
           >
             <Typography
               mt="1rem"
+              padding="4px"
               fontSize="12px"
               fontWeight="bold"
               color="white"
             >
-              Total points: {top3[1].total_points}
+              Kokonaispisteet: {top3[1].total_points}
             </Typography>
           </Box>
         </Box>
@@ -222,7 +231,13 @@ const Pedestal = ({ top3 }) => {
               animation: `${slideUp3} 0.8s ease-out`,
             }}
           >
-            <Typography mt="1rem" position="absolute" fontSize="35px" fontWeight="bold">
+            <Typography
+              mt="1rem"
+              padding="4px"
+              position="absolute"
+              fontSize="35px"
+              fontWeight="bold"
+            >
               {top3[0].first_name}
             </Typography>
             <Box
@@ -253,11 +268,12 @@ const Pedestal = ({ top3 }) => {
           >
             <Typography
               mt="1rem"
+              padding="4px"
               fontSize="12px"
               fontWeight="bold"
               color="white"
             >
-              Total points: {top3[0].total_points}
+              Kokonaispisteet: {top3[0].total_points}
             </Typography>
           </Box>
         </Box>
@@ -315,11 +331,12 @@ const Pedestal = ({ top3 }) => {
           >
             <Typography
               mt="1rem"
+              padding="4px"
               fontSize="12px"
               fontWeight="bold"
               color="white"
             >
-              Total points: {top3[2].total_points}
+              Kokonaispisteet: {top3[2].total_points}
             </Typography>
           </Box>
         </Box>
@@ -385,7 +402,7 @@ const Pedestal = ({ top3 }) => {
           }}
         >
           <Typography mt="1rem" fontWeight="bold" color="white">
-            Total points: {top3[1].total_points}
+            Kokonaispisteet: {top3[1].total_points}
           </Typography>
         </Box>
       </Box>
@@ -441,7 +458,7 @@ const Pedestal = ({ top3 }) => {
           }}
         >
           <Typography mt="1rem" fontWeight="bold" color="white">
-            Total points: {top3[0].total_points}
+            Kokonaispisteet: {top3[0].total_points}
           </Typography>
         </Box>
       </Box>
@@ -498,7 +515,7 @@ const Pedestal = ({ top3 }) => {
           }}
         >
           <Typography mt="1rem" fontWeight="bold" color="white">
-            Total points: {top3[2].total_points}
+            Kokonaispisteet: {top3[2].total_points}
           </Typography>
         </Box>
       </Box>

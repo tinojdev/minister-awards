@@ -1,16 +1,16 @@
 import { useGetCategoriesQuery } from "@/state/api";
-import { Box, useTheme, useMediaQuery } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Box, useTheme, useMediaQuery, Skeleton } from "@mui/material";
+import { useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CustomLeftArrow from "./CustomLeftArrow";
 import CustomRightArrow from "./CustomRightArrow";
 import { alpha } from "@mui/material";
 
-export default function CategoryLink({ isSticky }) {
+export default function CategoryLink({ isSticky, isLoading, data }) {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -29,8 +29,6 @@ export default function CategoryLink({ isSticky }) {
       items: 2.5,
     },
   };
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const { data, error, isLoading } = useGetCategoriesQuery();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -38,24 +36,71 @@ export default function CategoryLink({ isSticky }) {
     }
   }, []);
 
+  if (isLoading) {
+    return (
+      <Box margin="1rem auto" maxWidth={1000}>
+        <Skeleton height={50} />
+      </Box>
+    );
+  }
+
   return (
-    <Box margin=" 1rem auto" className="carousel-container carousel-fade" maxWidth={1000}>
-      {data && (
-        <div>
-          <Carousel
-            responsive={responsive}
-            customLeftArrow={<CustomLeftArrow isSticky={isSticky}/>}
-            customRightArrow={<CustomRightArrow isSticky={isSticky} />}
-            removeArrowOnDeviceType={["mobile"]}
-            partialVisible={false}
+    <Box margin="1rem auto" className="carousel-container" maxWidth={1000}>
+      {data &&
+        (isSmallScreen ? (
+          <Box
+            display="flex"
+            gap="8px"
+            sx={{
+              overflowX: "auto",
+              whiteSpace: "nowrap",
+              scrollbarWidth: "none",
+            }}
           >
             {data.map((category) => (
               <Box
                 key={category.id}
-                padding= {isSmallScreen ? "8px" : "5px"}
+                component="div"
+                display="inline-block"
+                padding="8px"
                 borderRadius="6px"
                 sx={{
-                  backgroundColor: alpha(theme.palette.primary[100], 0.5), // Add transparency to the background
+                  backgroundColor: alpha(theme.palette.primary[100], 0.5),
+                  backdropFilter: "blur(10px)",
+                  boxShadow: "none",
+                  textAlign: "center",
+                  minWidth: "120px",
+                }}
+              >
+                <a
+                  href={`#${category.id}`}
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.primary[1000],
+                    fontSize: "0.8rem",
+                    display: "block",
+                  }}
+                >
+                  {category.name}
+                </a>
+              </Box>
+            ))}
+          </Box>
+        ) : (
+          <Carousel
+            responsive={responsive}
+            customLeftArrow={<CustomLeftArrow isSticky={isSticky} />}
+            customRightArrow={<CustomRightArrow isSticky={isSticky} />}
+            removeArrowOnDeviceType={["mobile"]}
+            partialVisible={true}
+          >
+            {data.map((category) => (
+              <Box
+                key={category.id}
+                padding="5px"
+                borderRadius="6px"
+                sx={{
+                  backgroundColor: alpha(theme.palette.primary[100], 0.5),
                   backdropFilter: "blur(10px)",
                   boxShadow: "none",
                   display: "flex",
@@ -78,8 +123,7 @@ export default function CategoryLink({ isSticky }) {
               </Box>
             ))}
           </Carousel>
-        </div>
-      )}
+        ))}
     </Box>
   );
 }
