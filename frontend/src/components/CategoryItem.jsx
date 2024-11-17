@@ -17,6 +17,7 @@ import Uncheckedbox from "./Uncheckedbox";
 import CloseIcon from "@mui/icons-material/Close";
 import { alpha } from "@mui/material";
 
+
 const CarouselItem = ({
   nomination,
   isSelected,
@@ -27,6 +28,9 @@ const CarouselItem = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
+  const timeDifference = endDate - new Date().getTime();
+  const eventStarted = timeDifference < 0
 
   const handleChange = () => {
     onCheckboxChange(nomination.id);
@@ -92,7 +96,7 @@ const CarouselItem = ({
             Test
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            Nominated: {nomination.nominated_voter}
+            Nimitetty: {nomination.nominated_voter}
           </Typography>
         </CardContent>
         <CardActions
@@ -104,9 +108,10 @@ const CarouselItem = ({
           }}
         >
           <Checkbox
+            disabled={!eventStarted}
             checked={isSelected}
             onChange={handleChange}
-            icon={<Uncheckedbox />}
+            icon={<Uncheckedbox eventStarted={eventStarted} />}
             checkedIcon={<Checkedbox order={order} />}
             data-tour={index === 0 ? "checkbox-0" : undefined}
           />
@@ -136,8 +141,11 @@ const CarouselItem = ({
               playsInline
               loop
               style={{
-                width: "70vw",
+                width: "100%",
+                height: "auto",
+                minWidth: isXsmallScreen ? "70vw" : "30vw",
                 maxHeight: "70vh",
+                maxWidth: "70vw",
                 objectFit: "fill",
               }}
             >
@@ -149,11 +157,12 @@ const CarouselItem = ({
               src={mediaSrc}
               alt="Media"
               style={{
-                width: "auto",
+                width: "100%",
                 height: "auto",
-                maxHeight: "50vh",
-                maxWidth: "50vw",
-                objectFit: "contain",
+                minWidth: isXsmallScreen ? "70vw" : "30vw",
+                maxHeight: "70vh",
+                maxWidth: "70vw",
+                objectFit: "fill",
               }}
             />
           )}
@@ -165,7 +174,10 @@ const CarouselItem = ({
               right: "2%",
               boxShadow: 24,
               opacity: "100%",
-              backgroundColor: alpha(theme.palette.primary[300], 0.8),
+              backgroundColor: alpha(theme.palette.primary[300], 0.7),
+              '&:hover': {
+                bgcolor: (theme) => alpha(theme.palette.primary[500], 0.9),
+              },
             }}
           >
             <CloseIcon sx={{ color: theme.palette.primary[1000] }} />

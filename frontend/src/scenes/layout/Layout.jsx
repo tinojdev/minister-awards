@@ -21,11 +21,9 @@ const Layout = () => {
     if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
       setShowNavbar(false);
     } else {
-      // Scrolling up, show the navbar
       setShowNavbar(true);
     }
 
-    // Update the lastScrollY value directly through useRef
     lastScrollY.current = currentScrollY;
   };
 
@@ -71,9 +69,8 @@ const Layout = () => {
         flexDirection="column"
         width="100%"
         height="100%"
-        overflow="hidden" // Ensure no overflow issue for the entire container
+        overflow="hidden"
       >
-        {/* Sticky Navbar with show/hide on scroll */}
 
         {/* Content area that can scroll */}
         <Box ref={scrollContainerRef} flexGrow={1} overflow="auto">
@@ -82,8 +79,8 @@ const Layout = () => {
               position: "sticky",
               top: 0,
               zIndex: 1100,
-              transform: showNavbar ? "translateY(0)" : "translateY(-100%)", // Slide navbar up when hidden
-              transition: "transform 0.3s ease", // Smooth transition
+              transform: showNavbar ? "translateY(0)" : "translateY(-100%)", 
+              transition: "transform 0.3s ease", 
             }}
           >
             <Navbar
@@ -91,8 +88,7 @@ const Layout = () => {
               setIsSidebarOpen={setIsSidebarOpen}
             />
           </Box>
-          {/* Pass showNavbar to the Outlet */}
-          <Outlet context={{ showNavbar, scrollContainerRef }} />
+          <Outlet context={{ isSidebarOpen, showNavbar, scrollContainerRef }} />
           <Footer />
         </Box>
       </Box>

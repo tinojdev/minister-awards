@@ -10,9 +10,13 @@ import Paper from "@mui/material/Paper";
 import { useGetCategoriesQuery, useGetVotersQuery } from "@/state/api";
 import { LeaderboardNominationItem } from "./LeaderboardNominationItem";
 import Pedestal from "@/components/Pedestal";
+import { useOutletContext } from "react-router-dom";
+
 
 const Leaderboard = () => {
   // Fetch categories and voters
+  const { isSidebarOpen, showNavbar, scrollContainerRef } = useOutletContext();
+  console.log(" 🤓 ~ Leaderboard ~ isSidebarOpen:", isSidebarOpen)
   const {
     data: categories,
     error: categoryError,
@@ -41,7 +45,7 @@ const Leaderboard = () => {
   return (
     <Box sx={{ padding: 4 }}>
       <Box>
-        <Pedestal top3={sortedVoters.slice(0,3)} />
+        <Pedestal top3={sortedVoters.slice(0,3)} isSidebarOpen={isSidebarOpen} />
       </Box>
       {/* Loop over categories */}
       {categories.map((c) => (

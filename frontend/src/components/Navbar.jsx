@@ -24,9 +24,11 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </Box>
         <Box
           sx={{
+            height: "80px",
             display: "flex",
             flexGrow: 1,
             justifyContent: "center",
+            alignItems: "center",
             marginRight: "3rem",
           }}
         >

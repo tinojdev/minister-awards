@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 
-const Uncheckedbox = () => {
+const Uncheckedbox = ({eventStarted}) => {
   const theme = useTheme();
   return (
     <Box
@@ -12,7 +12,7 @@ const Uncheckedbox = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        borderColor: "#0071BC",
+        borderColor: !eventStarted ? "grey" : "#0071BC",
         borderRadius: "3px",
       }}
     ></Box>
