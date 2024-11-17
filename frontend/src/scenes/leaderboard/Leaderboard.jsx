@@ -92,31 +92,42 @@ const Leaderboard = () => {
           isSidebarOpen={isSidebarOpen}
         />
       </Box>
-      <Box maxWidth={1000} margin="0 auto" sx={{height: showmore ? "auto" : 0, overflow: "hidden"}}>
-        {categories.map((category, index) => {
-          const filteredVotes = votes?.filter(
-            (vote) => vote.category === category.id
-          );
-          return <DetailedStats category={category} votes={filteredVotes} />;
-        })}
+      <Box
+        maxWidth={1000}
+        margin="0 auto"
+        sx={{ height: showmore ? "auto" : 0, overflow: "hidden" }}
+      >
+        {showmore &&
+          categories.map((category, index) => {
+            const filteredVotes = votes?.filter(
+              (vote) => vote.category === category.id
+            );
+            return (
+              <DetailedStats
+                key={index}
+                category={category}
+                votes={filteredVotes}
+              />
+            );
+          })}
       </Box>
       <Box display="flex" justifyContent="center" mt={2}>
-              <Button
-                onClick={handleButtonClick}
-                sx={{
-                  borderRadius: 5,
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: "inherit",
-                  },
-                }}
-              >
-                {showmore ? "Näytä vähemmän" : "Näytä tarkat pistemäärät"}
-                <Icon sx={{ display: "flex" }}>
-                  {showmore ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                </Icon>
-              </Button>
-        </Box>
+        <Button
+          onClick={handleButtonClick}
+          sx={{
+            borderRadius: 5,
+            textTransform: "none",
+            "&:hover": {
+              backgroundColor: "inherit",
+            },
+          }}
+        >
+          {showmore ? "Näytä vähemmän" : "Näytä tarkat pistemäärät"}
+          <Icon sx={{ display: "flex" }}>
+            {showmore ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </Icon>
+        </Button>
+      </Box>
       {/* Loop over categories */}
       {categories.map((c) => (
         <Box key={c.id} sx={{ marginBottom: 4 }}>
