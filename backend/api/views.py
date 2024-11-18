@@ -146,6 +146,7 @@ class VoteListView(views.APIView):
         )
         previous_votes = list(previous_votes)
 
+
         if len(previous_votes) > 3:
             return Response(
                 "The maximum number of votes for this category is 3", status=400
@@ -156,6 +157,9 @@ class VoteListView(views.APIView):
                 return Response(
                     "Voter has already voted for this nomination", status=400
                 )
+        
+        request.data["voter"] = request.voter
+
         serializer = VoteSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
