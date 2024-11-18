@@ -12,11 +12,9 @@ import {
   IconButton,
   useMediaQuery,
 } from "@mui/material";
-import Checkedbox from "./Checkedbox";
-import Uncheckedbox from "./Uncheckedbox";
+import { TextCheckBox, UncheckedBox } from "./Checkboxes";
 import CloseIcon from "@mui/icons-material/Close";
 import { alpha } from "@mui/material";
-
 
 const CarouselItem = ({
   nomination,
@@ -30,8 +28,8 @@ const CarouselItem = ({
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
   const timeDifference = endDate - new Date().getTime();
-  let eventStarted = timeDifference < 0
-  eventStarted = true
+  let eventStarted = timeDifference < 0;
+  eventStarted = true;
 
   const handleChange = () => {
     onCheckboxChange(nomination.id);
@@ -93,10 +91,15 @@ const CarouselItem = ({
             display: "flex",
             alignItems: "start",
             justifyContent: "center",
-            flexDirection: "column"
+            flexDirection: "column",
           }}
         >
-          <Typography fontWeight="bold" gutterBottom variant="h2" component="div">
+          <Typography
+            fontWeight="bold"
+            gutterBottom
+            variant="h2"
+            component="div"
+          >
             {nomination.nomination_text}
             Test
           </Typography>
@@ -116,8 +119,8 @@ const CarouselItem = ({
             disabled={!eventStarted}
             checked={isSelected}
             onChange={handleChange}
-            icon={<Uncheckedbox eventStarted={eventStarted} />}
-            checkedIcon={<Checkedbox order={order} />}
+            icon={<UncheckedBox eventStarted={eventStarted} />}
+            checkedIcon={<TextCheckBox text={`${order}.`} />}
             data-tour={index === 0 ? "checkbox-0" : undefined}
           />
         </CardActions>
@@ -180,7 +183,7 @@ const CarouselItem = ({
               boxShadow: 24,
               opacity: "100%",
               backgroundColor: alpha(theme.palette.primary[300], 0.7),
-              '&:hover': {
+              "&:hover": {
                 bgcolor: (theme) => alpha(theme.palette.primary[500], 0.9),
               },
             }}
