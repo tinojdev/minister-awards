@@ -51,7 +51,7 @@ class Nomination(models.Model):
         source="image",
         format="JPEG",
         processors=[ResizeToFit(300, 200)],
-        options={"quality": 90},
+        options={"quality": 100},
     )
 
     video = models.FileField(upload_to="nomination_videos", blank=True, null=True)
