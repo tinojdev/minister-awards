@@ -48,7 +48,6 @@ export const api = createApi({
           body: {
             category: categoryId,
             nomination: nominationId,
-            voter: "Tino",
             weight: weight,
           },
         };
