@@ -30,7 +30,8 @@ const CarouselItem = ({
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
   const timeDifference = endDate - new Date().getTime();
-  const eventStarted = timeDifference < 0
+  let eventStarted = timeDifference < 0
+  eventStarted = true
 
   const handleChange = () => {
     onCheckboxChange(nomination.id);
