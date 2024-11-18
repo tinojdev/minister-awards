@@ -40,6 +40,7 @@ class VoteSerializer(serializers.ModelSerializer):
         required_fields = ["weight"]
         fields = [
             "id",
+            "voter",
             "nomination",
             "category",
             "weight",
