@@ -22,6 +22,7 @@ const CarouselItem = ({
   order,
   onCheckboxChange,
   index,
+  isLoading,
 }) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -32,6 +33,7 @@ const CarouselItem = ({
   eventStarted = true;
 
   const handleChange = () => {
+    if (isLoading) return;
     onCheckboxChange(nomination.id);
   };
 
@@ -116,7 +118,7 @@ const CarouselItem = ({
           }}
         >
           <Checkbox
-            disabled={!eventStarted}
+            disabled={isLoading || !eventStarted}
             checked={isSelected}
             onChange={handleChange}
             icon={<UncheckedBox eventStarted={eventStarted} />}

@@ -116,7 +116,7 @@ class VoterList(views.APIView):
 
         if should_return_points:
             voters = Voter.objects.all().annotate(
-                total_points=Sum("nominations__votes__weight", default=0)
+                total_points=Sum("nominations__votes__order", default=0)
             )
 
             serializer = VoterSerializer(voters, many=True)
@@ -132,7 +132,7 @@ class VoteListView(views.APIView):
     Vote for a nomination.
 
     Required fields
-    weight: int
+    order: int
     """
 
     permission_classes = [IsVoter | permissions.IsAdminUser]

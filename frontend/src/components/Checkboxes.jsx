@@ -1,4 +1,4 @@
-import { useTheme, Box, Typography } from "@mui/material";
+import { useTheme, Box, Typography, CircularProgress } from "@mui/material";
 
 function BaseCheckbox({ children }) {
   const theme = useTheme();

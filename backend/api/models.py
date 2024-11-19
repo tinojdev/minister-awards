@@ -72,8 +72,8 @@ class Vote(models.Model):
         Category, related_name="votes", on_delete=models.CASCADE
     )
 
-    weight = models.PositiveIntegerField(blank=False)
+    order = models.PositiveIntegerField(blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.voter} voted for {self.nomination.nominated_voter} in {self.category}, weight: {self.weight}."
+        return f"{self.voter} voted for {self.nomination.nominated_voter} in {self.category}, order: {self.order}."

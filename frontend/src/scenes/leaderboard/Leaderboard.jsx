@@ -57,10 +57,10 @@ const Leaderboard = () => {
           grouped[key] = {
             category: vote.category,
             nominated_voter: vote.nominated_voter,
-            totalWeight: 0, // Initialize total weight for this category and voter
+            totalOrder: 0, // Initialize total weight for this category and voter
           };
         }
-        grouped[key].totalWeight += vote.weight; // Sum the weights for the votes
+        grouped[key].totalOrder += vote.order; // Sum the weights for the votes
       });
     }
 
@@ -224,7 +224,7 @@ const Leaderboard = () => {
                         align="center"
                         sx={{ padding: "10px" }}
                       >
-                        {vote ? vote.totalWeight : 0}{" "}
+                        {vote ? vote.totalOrder : 0}{" "}
                         {/* Display total weight or 0 if no votes */}
                       </TableCell>
                     );
