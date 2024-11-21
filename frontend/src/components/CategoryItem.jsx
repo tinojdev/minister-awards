@@ -15,6 +15,7 @@ import {
 import { TextCheckBox, UncheckedBox } from "./Checkboxes";
 import CloseIcon from "@mui/icons-material/Close";
 import { alpha } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const CarouselItem = ({
   nomination,
@@ -29,6 +30,10 @@ const CarouselItem = ({
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
   const timeDifference = endDate - new Date().getTime();
+  const [loading, setLoading] = useState(true);
+  const handleMediaLoad = () => {
+    setLoading(false);
+  };
   let eventStarted = timeDifference < 0;
   eventStarted = true;
 
@@ -128,10 +133,14 @@ const CarouselItem = ({
         </CardActions>
       </Card>
       <Modal
+        disableAutoFocus
         open={open}
         onClose={handleClose}
         aria-labelledby="enlarged-image"
         aria-describedby="enlarged-image-description"
+        sx={{
+          outline: "none",
+        }}
       >
         <Box
           sx={{
@@ -144,13 +153,17 @@ const CarouselItem = ({
             backgroundColor: "transparent",
           }}
         >
-          {/* Enlarged image */}
+          {loading && (
+            <CircularProgress sx={{ color: theme.palette.secondary[400] }} />
+          )}
           {mediaSrc.endsWith(".mp4") ? (
             <video
               autoPlay
               playsInline
               loop
+              onLoadedData={handleMediaLoad}
               style={{
+                display: loading ? "none" : "block", // Hide until loaded
                 width: "100%",
                 height: "auto",
                 minWidth: isXsmallScreen ? "70vw" : "30vw",
@@ -166,7 +179,9 @@ const CarouselItem = ({
             <img
               src={mediaSrc}
               alt="Media"
+              onLoad={handleMediaLoad}
               style={{
+                display: loading ? "none" : "block", // Hide until loaded
                 width: "100%",
                 height: "auto",
                 minWidth: isXsmallScreen ? "70vw" : "30vw",
@@ -176,22 +191,24 @@ const CarouselItem = ({
               }}
             />
           )}
-          <IconButton
-            onClick={handleClose}
-            sx={{
-              position: "absolute",
-              top: "1%",
-              right: "2%",
-              boxShadow: 24,
-              opacity: "100%",
-              backgroundColor: alpha(theme.palette.primary[300], 0.7),
-              "&:hover": {
-                bgcolor: (theme) => alpha(theme.palette.primary[500], 0.9),
-              },
-            }}
-          >
-            <CloseIcon sx={{ color: theme.palette.primary[1000] }} />
-          </IconButton>
+          {!loading && (
+            <IconButton
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                top: "1%",
+                right: "2%",
+                boxShadow: 24,
+                opacity: "100%",
+                backgroundColor: alpha(theme.palette.primary[300], 0.7),
+                "&:hover": {
+                  bgcolor: (theme) => alpha(theme.palette.primary[500], 0.9),
+                },
+              }}
+            >
+              <CloseIcon sx={{ color: theme.palette.primary[1000] }} />
+            </IconButton>
+          )}
         </Box>
       </Modal>
     </Box>
