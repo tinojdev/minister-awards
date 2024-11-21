@@ -117,7 +117,7 @@ const Category = ({ id, name, nominations, index }) => {
           className="custom-tour"
         />
       )}
-      <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
+      <Box display="flex" alignItems="center" marginBottom="0.5rem" width="100%">
         <Header id={id} title={name} />
         <Typography
           variant="h6"

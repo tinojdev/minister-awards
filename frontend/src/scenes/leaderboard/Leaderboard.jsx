@@ -19,6 +19,7 @@ import DetailedStats from "@/components/DetailedStats";
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Error from "@/components/Error";
 
 const Leaderboard = () => {
   const [showmore, setShowmore] = useState(false);
@@ -73,7 +74,7 @@ const Leaderboard = () => {
   }
 
   if (categoryError || votersError || votesError) {
-    return <p>Error loading data</p>;
+    return <Error />;
   }
 
   // Group votes using the fetched data

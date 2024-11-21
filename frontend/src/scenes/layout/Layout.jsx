@@ -57,7 +57,7 @@ const Layout = () => {
       {/* Sidebar component */}
       <Sidebar
         isNonMobile={isNonMobile}
-        drawerWidth="250px"
+        drawerWidth={isNonMobile ? "250px" : "70%"}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
