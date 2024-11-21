@@ -43,7 +43,10 @@ const CarouselItem = ({
   };
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setLoading(true)
+  };
 
   const mediaSrcThumbnail = `${import.meta.env.VITE_BASE_MEDIA_URL}${
     nomination.image_thumbnail || nomination.video
