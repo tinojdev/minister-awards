@@ -6,6 +6,7 @@ django.setup()
 from pathlib import Path
 import logging
 import io
+import random
 from django.core.files.images import ImageFile
 from django.core.files import File
 from api.models import Voter, Category, Nomination
@@ -25,6 +26,20 @@ from dotenv import load_dotenv
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
+
+LIST_OF_BRAINROT = [
+    "Herrapeto gif",
+    "skibiditoilet",
+    "ohio rizz",
+    "skibidisammakko",
+    "gyatt gif",
+    "kanye west freddy fazbear nitrous gif",
+    "fanum tax",
+    "quirked up white boy (santtu) gif",
+    "gooner gif",
+    "english or spanish",
+]
+
 
 CATEGORY, NOMINEE = range(2)
 
@@ -111,7 +126,8 @@ async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not context.args:
         await update.message.reply_text(
-            "Anna ehdotukselle otsikko, esim\. \n" "> /nominate Herrapeto gif",
+            "Anna ehdotukselle otsikko, esim\. \n"
+            f"> /nominate {random.choice(LIST_OF_BRAINROT)}",
             parse_mode="MarkdownV2",
         )
         return -1
