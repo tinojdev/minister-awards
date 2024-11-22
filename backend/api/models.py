@@ -44,7 +44,7 @@ class Nomination(models.Model):
     category = models.ForeignKey(
         Category, related_name="nominations", on_delete=models.CASCADE
     )
-    nomination_text = models.TextField(blank=True, null=True)
+    title = models.TextField(blank=False, null=False)
 
     image = models.ImageField(upload_to="nomination_images", blank=True, null=True)
     image_thumbnail = ImageSpecField(

@@ -7,7 +7,6 @@ class NominationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Nomination
-        fields = ["id", "name", "category", "image", "image_thumbnail"]
         fields = "__all__"
 
 

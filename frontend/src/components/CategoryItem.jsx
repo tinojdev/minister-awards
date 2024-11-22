@@ -45,7 +45,7 @@ const CarouselItem = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setLoading(true)
+    setLoading(true);
   };
 
   const mediaSrcThumbnail = `${import.meta.env.VITE_BASE_MEDIA_URL}${
@@ -110,8 +110,7 @@ const CarouselItem = ({
             variant="h2"
             component="div"
           >
-            {nomination.nomination_text}
-            Test
+            {nomination.title}
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
             Nimitetty: {nomination.nominated_voter}
