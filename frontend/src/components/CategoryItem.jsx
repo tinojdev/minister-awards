@@ -16,6 +16,7 @@ import { TextCheckBox, UncheckedBox } from "./Checkboxes";
 import CloseIcon from "@mui/icons-material/Close";
 import { alpha } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import { canVote } from "@/utils/utils";
 
 const CarouselItem = ({
   nomination,
@@ -28,14 +29,11 @@ const CarouselItem = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
-  const timeDifference = endDate - new Date().getTime();
   const [loading, setLoading] = useState(true);
   const handleMediaLoad = () => {
     setLoading(false);
   };
-  let eventStarted = timeDifference < 0;
-  eventStarted = true;
+  const isCheckBoxDisabled = !canVote();
 
   const handleChange = () => {
     if (isLoading) return;
@@ -125,11 +123,13 @@ const CarouselItem = ({
           }}
         >
           <Checkbox
-            disabled={isLoading || !eventStarted}
+            disabled={isLoading || isCheckBoxDisabled}
             checked={isSelected}
             onChange={handleChange}
-            icon={<UncheckedBox eventStarted={eventStarted} />}
-            checkedIcon={<TextCheckBox text={`${order}.`} />}
+            icon={<UncheckedBox disabled={isCheckBoxDisabled} />}
+            checkedIcon={
+              <TextCheckBox text={`${order}.`} disabled={isCheckBoxDisabled} />
+            }
             data-tour={index === 0 ? "checkbox-0" : undefined}
           />
         </CardActions>

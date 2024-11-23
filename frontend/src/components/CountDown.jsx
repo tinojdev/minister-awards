@@ -1,3 +1,4 @@
+import { getVoteStartDate, getVoteEndDate } from "@/utils/utils";
 import {
   Box,
   Typography,
@@ -8,8 +9,8 @@ import {
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 
-const startDate = new Date(import.meta.env.VITE_START_DATE).getTime();
-const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
+const startDate = getVoteStartDate().getTime();
+const endDate = getVoteEndDate().getTime();
 
 function CountDown() {
   const [countdownText, setCountdownText] = useState("Äänestykseen");
