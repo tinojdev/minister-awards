@@ -1,12 +1,19 @@
-import { Box, Typography, useMediaQuery, useTheme, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  Divider,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 
+const startDate = new Date(import.meta.env.VITE_START_DATE).getTime();
 const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
 
 function CountDown() {
   const [countdownText, setCountdownText] = useState("Äänestykseen");
-  const [distance, setDistance] = useState(endDate - new Date().getTime());
+  const [distance, setDistance] = useState(startDate - new Date().getTime());
   const { isSidebarOpen, showNavbar, scrollContainerRef } = useOutletContext();
 
   const theme = useTheme();
@@ -24,19 +31,29 @@ function CountDown() {
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date().getTime();
-      const remainingTime = endDate - now;
+      let remainingTime;
 
-      if (remainingTime <= 0) {
-        clearInterval(interval);
-        setCountdownText("Tilanne on vittu!");
-        setDistance(0);
+      if (distance > 0 && countdownText === "Äänestykseen") {
+        remainingTime = startDate - now;
+
+        if (remainingTime <= 0) {
+          setCountdownText("Äänestäminen päättyy");
+          remainingTime = endDate - now;
+        }
       } else {
-        setDistance(remainingTime);
+        remainingTime = endDate - now;
+
+        if (remainingTime <= 0) {
+          clearInterval(interval);
+          remainingTime = 0; // End of countdown
+        }
       }
+
+      setDistance(remainingTime);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [countdownText, distance]);
 
   const days = Math.floor(distance / (1000 * 60 * 60 * 24));
   const hours = Math.floor(
@@ -54,7 +71,12 @@ function CountDown() {
         {countdownText}
       </Typography>
       {distance > 0 && (
-        <Box display="flex" alignItems="center" justifyContent="center" height="100%">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
           <Box mr="0.5rem" height="100%">
             <Typography
               fontWeight="bold"
@@ -77,7 +99,11 @@ function CountDown() {
               Päivää
             </Typography>
           </Box>
-          <Divider flexItem orientation="vertical" sx={{ height: "2rem", mt: isXsmallScreen ? "1rem" : "1.5rem"}}/>
+          <Divider
+            flexItem
+            orientation="vertical"
+            sx={{ height: "2rem", mt: isXsmallScreen ? "1rem" : "1.5rem" }}
+          />
           <Box mr="0.5rem" ml="0.5rem" height="100%">
             <Typography
               fontWeight="bold"
@@ -91,12 +117,24 @@ function CountDown() {
               {hours}
             </Typography>
             <Typography
-              sx={{ textAlign: "center", fontSize: secondaryFontSize, padding: "3px",}}
+              sx={{
+                textAlign: "center",
+                fontSize: secondaryFontSize,
+                padding: "3px",
+              }}
             >
               Tuntia
             </Typography>
           </Box>
-          <Divider flexItem orientation="vertical" sx={{ height: "2rem", width: "px", mt: isXsmallScreen ? "1rem" : "1.5rem"}}/>
+          <Divider
+            flexItem
+            orientation="vertical"
+            sx={{
+              height: "2rem",
+              width: "px",
+              mt: isXsmallScreen ? "1rem" : "1.5rem",
+            }}
+          />
           <Box mr="0.5rem" ml="0.5rem">
             <Typography
               fontWeight="bold"
@@ -110,12 +148,24 @@ function CountDown() {
               {minutes}
             </Typography>
             <Typography
-              sx={{ textAlign: "center", fontSize: secondaryFontSize, padding: "3px", }}
+              sx={{
+                textAlign: "center",
+                fontSize: secondaryFontSize,
+                padding: "3px",
+              }}
             >
               Minuuttia
             </Typography>
           </Box>
-          <Divider flexItem orientation="vertical" sx={{ height: "2rem", width: "px", mt: isXsmallScreen ? "1rem" : "1.5rem"}}/>
+          <Divider
+            flexItem
+            orientation="vertical"
+            sx={{
+              height: "2rem",
+              width: "px",
+              mt: isXsmallScreen ? "1rem" : "1.5rem",
+            }}
+          />
           <Box ml="0.5rem">
             <Typography
               fontWeight="bold"
@@ -129,7 +179,11 @@ function CountDown() {
               {seconds}
             </Typography>
             <Typography
-              sx={{ textAlign: "center", fontSize: secondaryFontSize, padding: "3px", }}
+              sx={{
+                textAlign: "center",
+                fontSize: secondaryFontSize,
+                padding: "3px",
+              }}
             >
               Sekuntia
             </Typography>
