@@ -19,6 +19,7 @@ import DetailedStats from "@/components/DetailedStats";
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Error from "@/components/Error";
 
 const Leaderboard = () => {
   const [showmore, setShowmore] = useState(false);
@@ -57,10 +58,10 @@ const Leaderboard = () => {
           grouped[key] = {
             category: vote.category,
             nominated_voter: vote.nominated_voter,
-            totalWeight: 0, // Initialize total weight for this category and voter
+            totalOrder: 0, // Initialize total weight for this category and voter
           };
         }
-        grouped[key].totalWeight += vote.weight; // Sum the weights for the votes
+        grouped[key].totalOrder += vote.order; // Sum the weights for the votes
       });
     }
 
@@ -73,7 +74,7 @@ const Leaderboard = () => {
   }
 
   if (categoryError || votersError || votesError) {
-    return <p>Error loading data</p>;
+    return <Error />;
   }
 
   // Group votes using the fetched data
@@ -206,7 +207,7 @@ const Leaderboard = () => {
                         align="center"
                         sx={{ padding: "10px" }}
                       >
-                        {vote ? vote.totalWeight : 0}{" "}
+                        {vote ? vote.totalOrder : 0}{" "}
                         {/* Display total weight or 0 if no votes */}
                       </TableCell>
                     );

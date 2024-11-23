@@ -34,34 +34,54 @@ export const api = createApi({
           url: `votes/`,
         };
       },
-      providesTags: ["Vote"],
+      providesTags: (result, error, arg) => {
+        if (!arg.categoryId) {
+          return [{ type: "Vote", id: "LIST" }];
+        }
+        return [
+          {
+            type: "Vote",
+            id: String(arg.categoryId),
+          },
+        ];
+      },
     }),
     getAllVotes: build.query({
       query: () => "votes/",
       providesTags: ["Vote"],
     }),
     postVote: build.mutation({
-      query: ({ categoryId, nominationId, weight }) => {
+      query: ({ categoryId, nominationId, order }) => {
         return {
           url: `votes/`,
           method: "POST",
           body: {
             category: categoryId,
             nomination: nominationId,
-            weight: weight,
+            order: order,
           },
         };
       },
-      invalidatesTags: ["Vote"],
+      invalidatesTags: (result, error, arg) => {
+        return [
+          { type: "Vote", id: String(arg.categoryId) },
+          { type: "Vote", id: "LIST" },
+        ];
+      },
     }),
     deleteVote: build.mutation({
-      query: ({ voteId }) => {
+      query: ({ vote }) => {
         return {
-          url: `votes/${voteId}`,
+          url: `votes/${vote.id}`,
           method: "DELETE",
         };
       },
-      invalidatesTags: ["Vote"],
+      invalidatesTags: (result, error, arg) => {
+        return [
+          { type: "Vote", id: String(arg.vote.category) },
+          { type: "Vote", id: "LIST" },
+        ];
+      },
     }),
   }),
 });

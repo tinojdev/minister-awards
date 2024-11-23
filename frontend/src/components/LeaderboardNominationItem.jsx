@@ -28,8 +28,8 @@ export const LeaderboardNominationItem = ({ nomination }) => {
 
   useEffect(() => {
     if (votesData && Array.isArray(votesData)) {
-      const totalWeight = votesData.reduce((acc, v) => acc + v.weight, 0);
-      setVotes(totalWeight);
+      const totalOrder = votesData.reduce((acc, v) => acc + v.order, 0);
+      setVotes(totalOrder);
     }
   }, [votesData]);
 

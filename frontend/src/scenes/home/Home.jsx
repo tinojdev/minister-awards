@@ -12,6 +12,7 @@ import Category from "@/components/Category";
 import CategoryLink from "@/components/CategoryLink";
 import { alpha } from "@mui/material";
 import Wait from "../waiting_page/WaitingPage";
+import Error from "@/components/Error";
 
 const Home = () => {
   let { data, error, isLoading } = useGetCategoriesQuery();
@@ -123,10 +124,7 @@ const Home = () => {
 
   if (error) {
     return (
-      <Box padding="2rem" sx={{ backgroundColor: theme.palette.primary[0] }}>
-        <Typography variant="h3">{error.status}</Typography>
-        <Typography variant="body2">{error.error}</Typography>
-      </Box>
+      <Error status={error.status} isNonMobile={isNonMobile}/>
     );
   }
 

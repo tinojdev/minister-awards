@@ -7,7 +7,6 @@ class NominationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Nomination
-        fields = ["id", "name", "category", "image", "image_thumbnail"]
         fields = "__all__"
 
 
@@ -37,13 +36,13 @@ class VoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vote
-        required_fields = ["weight"]
+        required_fields = ["order"]
         fields = [
             "id",
             "voter",
             "nomination",
             "category",
-            "weight",
+            "order",
             "timestamp",
             "nominated_voter",
         ]

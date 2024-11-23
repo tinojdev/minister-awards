@@ -6,6 +6,7 @@ django.setup()
 from pathlib import Path
 import logging
 import io
+import random
 from django.core.files.images import ImageFile
 from django.core.files import File
 from api.models import Voter, Category, Nomination
@@ -25,6 +26,20 @@ from dotenv import load_dotenv
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
+
+LIST_OF_BRAINROT = [
+    "Herrapeto gif",
+    "skibiditoilet",
+    "ohio rizz",
+    "skibidisammakko",
+    "gyatt gif",
+    "kanye west freddy fazbear nitrous gif",
+    "fanum tax",
+    "quirked up white boy (santtu) gif",
+    "gooner gif",
+    "english or spanish",
+]
+
 
 CATEGORY, NOMINEE = range(2)
 
@@ -109,7 +124,16 @@ async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not replied_to_message:
         return -1
 
+    if not context.args:
+        await update.message.reply_text(
+            "Anna ehdotukselle otsikko, esim\. \n"
+            f"> /nominate {random.choice(LIST_OF_BRAINROT)}",
+            parse_mode="MarkdownV2",
+        )
+        return -1
+    context.user_data["title"] = " ".join(context.args)
     context.user_data["message"] = replied_to_message
+    context.user_data["voter_id"] = update.message.from_user.id
 
     keyboard = []
     for category in categories:
@@ -136,6 +160,9 @@ async def category_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     data = query.data
     await query.answer()
+
+    if context.user_data["voter_id"] != query.from_user.id:
+        return
 
     category = await Category.objects.aget(id=int(data))
     context.user_data["category"] = category
@@ -165,6 +192,9 @@ async def nominee_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     data = query.data
     await query.answer()
+
+    if context.user_data["voter_id"] != query.from_user.id:
+        return
 
     voter = await Voter.objects.aget(first_name=data)
     category = context.user_data["category"]
@@ -198,9 +228,15 @@ async def nominee_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         video_file = await video.get_file()
         byte_arr = await video_file.download_as_bytearray()
         video_file = File(io.BytesIO(byte_arr), name="submission.mp4")
+    else:
+        await query.edit_message_text(
+            "Et ole valinnut kuvaa, stickeriä tai videota.", reply_markup=None
+        )
+        return -1
 
     await Nomination.objects.acreate(
         nominated_voter=voter,
+        title=context.user_data["title"],
         category=category,
         image=image_file,
         video=video_file,

@@ -6,6 +6,7 @@ import {
   Icon,
   useMediaQuery,
   useTheme,
+  Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -27,7 +28,7 @@ const Category = ({ id, name, nominations, index }) => {
   const [postVote, postVoteResult] = usePostVoteMutation();
   const [deleteVote, deleteVoteResult] = useDeleteVoteMutation();
 
-  const { data, error, isLoading, refetch } = useGetVotesQuery({
+  const { data, error, isFetching, refetch, originalArgs } = useGetVotesQuery({
     categoryId: id,
     onlyPersonalVotes: true,
   });
@@ -52,36 +53,36 @@ const Category = ({ id, name, nominations, index }) => {
     }
   }, [data]);
 
-  const handleCheckboxChange = async (itemId) => {
-    const vote = votes.find((vote) => vote.nomination === itemId);
+  useEffect(() => {
+    if (!deleteVoteResult.isLoading) {
+      // refetch();
+    } else if (!postVoteResult.isLoading) {
+      // refetch();
+    }
+
+    if (deleteVoteResult.error !== undefined) {
+      alert("Epääänestäminen epäonnistui!");
+      console.error(deleteVoteResult.error);
+    }
+    if (postVoteResult.error !== undefined) {
+      alert("Äänestäminen epäonnistui!");
+      console.error(postVoteResult.error);
+    }
+  }, [deleteVoteResult, postVoteResult, refetch]);
+
+  function handleCheckboxChange(voteId) {
+    const vote = votes.find((vote) => vote.nomination === voteId);
 
     if (vote !== undefined) {
-      setVotes(votes.filter((v) => v.nomination !== itemId));
-      await deleteVote({ voteId: vote.id });
-      if (deleteVoteResult.error !== undefined) {
-        alert("Epääänestäminen epäonnistui!");
-        console.error(deleteVoteResult.error);
-      }
-      refetch();
+      deleteVote({ vote });
     } else if (votes.length < 3) {
-      setVotes([
-        ...votes,
-        { nomination: itemId, category: id, weight: votes.length + 1 },
-      ]);
-
-      await postVote({
+      postVote({
         categoryId: id,
-        nominationId: itemId,
-        weight: votes.length + 1,
+        nominationId: voteId,
+        order: votes.length + 1,
       });
-
-      if (postVoteResult.error !== undefined) {
-        alert("Äänestäminen epäonnistui!");
-        console.error(postVoteResult.error);
-      }
-      refetch();
     }
-  };
+  }
 
   useEffect(() => {
     const hasSeenTour = localStorage.getItem("hasSeenTour");
@@ -116,8 +117,22 @@ const Category = ({ id, name, nominations, index }) => {
           className="custom-tour"
         />
       )}
-      <Box display="flex" alignItems="start" marginBottom="0.5rem" width="100%">
+      <Box display="flex" alignItems="center" marginBottom="0.5rem" width="100%">
         <Header id={id} title={name} />
+        <Typography
+          variant="h6"
+          sx={{
+            marginLeft: "auto",
+            color:
+              votes.length === 0
+                ? "red"
+                : votes.length === 3
+                ? "green"
+                : "orange",
+          }}
+        >
+          {votes.length}/3
+        </Typography>
       </Box>
       <Box width="100%">
         <Grid container spacing={2} width="100%">
@@ -145,6 +160,11 @@ const Category = ({ id, name, nominations, index }) => {
                 }
                 onCheckboxChange={handleCheckboxChange}
                 index={index}
+                isLoading={
+                  isFetching ||
+                  postVoteResult.isLoading ||
+                  deleteVoteResult.isLoading
+                }
               />
             </Grid>
           ))}

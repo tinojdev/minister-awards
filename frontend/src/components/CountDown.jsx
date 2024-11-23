@@ -1,19 +1,22 @@
 import { Box, Typography, useMediaQuery, useTheme, Divider } from "@mui/material";
 import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 
 const endDate = new Date(import.meta.env.VITE_END_DATE).getTime();
 
 function CountDown() {
   const [countdownText, setCountdownText] = useState("Äänestykseen");
   const [distance, setDistance] = useState(endDate - new Date().getTime());
+  const { isSidebarOpen, showNavbar, scrollContainerRef } = useOutletContext();
 
   const theme = useTheme();
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isLargeScreen = useMediaQuery("(min-width: 900px)");
 
   let mainFontsize = "50px";
   let secondaryFontSize = "25px";
 
-  if (isXsmallScreen) {
+  if (isXsmallScreen || (isSidebarOpen && !isLargeScreen)) {
     mainFontsize = "37px";
     secondaryFontSize = "20px";
   }

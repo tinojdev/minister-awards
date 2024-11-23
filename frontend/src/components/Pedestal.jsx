@@ -69,7 +69,7 @@ const Pedestal = ({ top3, isSidebarOpen }) => {
   }
 `;
 
-  if (isXsmallScreen) {
+  if (isXsmallScreen || (isSidebarOpen && !isLargeScreen)) {
     slideUp = keyframes`
     0% {
       transform: translateY(24.5%);
