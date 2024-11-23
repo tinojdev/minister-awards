@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import {
   useGetCategoriesQuery,
   useGetVotersQuery,
-  useGetVotes1Query,
+  useGetAllVotesQuery,
 } from "@/state/api";
 import { LeaderboardNominationItem } from "../../components/LeaderboardNominationItem";
 import Pedestal from "@/components/Pedestal";
@@ -39,7 +39,7 @@ const Leaderboard = () => {
     data: votes,
     error: votesError,
     isLoading: isLoadingVotes,
-  } = useGetVotes1Query();
+  } = useGetAllVotesQuery();
 
   const handleButtonClick = () => {
     setShowmore((prevState) => !prevState);
@@ -85,7 +85,12 @@ const Leaderboard = () => {
     : [];
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        padding: "4px",
+      }}
+    >
       <Box>
         <Pedestal
           top3={sortedVoters.slice(0, 3)}
@@ -128,29 +133,6 @@ const Leaderboard = () => {
           </Icon>
         </Button>
       </Box>
-      {/* Loop over categories */}
-      {categories.map((c) => (
-        <Box key={c.id} sx={{ marginBottom: 4 }}>
-          {/* Category Name */}
-          <Typography variant="h2" sx={{ marginBottom: 2 }}>
-            {c.name}
-          </Typography>
-
-          {/* Nominations in a List */}
-          <List
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 2,
-            }}
-          >
-            {c.nominations.map((n) => (
-              <LeaderboardNominationItem nomination={n} key={n.id} />
-            ))}
-          </List>
-        </Box>
-      ))}
 
       <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
         <Table
@@ -167,7 +149,7 @@ const Leaderboard = () => {
                   textAlign: "center",
                 }}
               >
-                Voter Name
+                Ministeri
               </TableCell>
               {categories.map((category) => (
                 <TableCell
@@ -185,7 +167,7 @@ const Leaderboard = () => {
                   textAlign: "center",
                 }}
               >
-                Total Points
+                Kokonaispisteet
               </TableCell>
             </TableRow>
           </TableHead>

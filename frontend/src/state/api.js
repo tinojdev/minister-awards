@@ -36,7 +36,7 @@ export const api = createApi({
       },
       providesTags: ["Vote"],
     }),
-    getVotes1: build.query({
+    getAllVotes: build.query({
       query: () => "votes/",
       providesTags: ["Vote"],
     }),
@@ -70,7 +70,7 @@ export const {
   useGetNominationsByCategoryQuery,
   useGetCategoriesQuery,
   useGetVotersQuery,
-  useGetVotes1Query,
+  useGetAllVotesQuery,
   useGetVotesByNominationQuery,
   useGetVotesQuery,
   usePostVoteMutation,

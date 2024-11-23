@@ -8,7 +8,12 @@ function Footer() {
   let CurrentYear = d.getFullYear();
 
   return (
-    <Box sx={{ textAlign: "center", background: theme.palette.primary[0] }}>
+    <Box
+      sx={{
+        textAlign: "center",
+        background: theme.palette.primary[0],
+      }}
+    >
       <Box sx={{}}>
         <Typography
           variant="h4"
