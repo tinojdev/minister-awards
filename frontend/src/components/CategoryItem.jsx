@@ -29,6 +29,7 @@ const CarouselItem = ({
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isXsmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isLargeScreen = useMediaQuery("(min-width: 900px)");
   const [loading, setLoading] = useState(true);
   const handleMediaLoad = () => {
     setLoading(false);
@@ -60,8 +61,10 @@ const CarouselItem = ({
         sx={{
           width: "99.9%",
           height: "100%",
+          maxWidth: "99.9%",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
           borderRadius: "8px",
           backgroundColor: alpha(theme.palette.primary[50], 1), // Add transparency to the background
           backdropFilter: "blur(10px)",
@@ -76,6 +79,7 @@ const CarouselItem = ({
           sx={{
             height: "100%",
             width: !isXsmallScreen ? "120px" : "100px",
+            maxWidth: "30%",
             objectFit: "cover",
             borderRadius: "8px",
             transition: "transform 0.3s ease",
@@ -95,18 +99,28 @@ const CarouselItem = ({
         <CardContent
           sx={{
             flexGrow: 1,
-            height: "15%",
+            height: "100%",
             display: "flex",
             alignItems: "start",
             justifyContent: "center",
             flexDirection: "column",
+            maxWidth: "55%",
           }}
         >
           <Typography
             fontWeight="bold"
             gutterBottom
-            variant="h2"
-            component="div"
+            variant={isXsmallScreen ? "h4" : "h3"}
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: isXsmallScreen
+                ? "150px"
+                : isLargeScreen
+                ? "200px"
+                : "250px",
+            }}
           >
             {nomination.title}
           </Typography>
@@ -119,7 +133,7 @@ const CarouselItem = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "15%",
+            width: "15%",
           }}
         >
           <Checkbox
