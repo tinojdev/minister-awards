@@ -34,6 +34,8 @@ const Category = ({ id, name, nominations, index }) => {
     onlyPersonalVotes: true,
   });
 
+  const userCanVote = canVote();
+
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const steps = [
@@ -55,12 +57,6 @@ const Category = ({ id, name, nominations, index }) => {
   }, [data]);
 
   useEffect(() => {
-    if (!deleteVoteResult.isLoading) {
-      // refetch();
-    } else if (!postVoteResult.isLoading) {
-      // refetch();
-    }
-
     if (deleteVoteResult.error !== undefined) {
       alert("Epääänestäminen epäonnistui!");
       console.error(deleteVoteResult.error);
@@ -88,7 +84,7 @@ const Category = ({ id, name, nominations, index }) => {
   useEffect(() => {
     const hasSeenTour = localStorage.getItem("hasSeenTour");
 
-    if (!hasSeenTour) {
+    if (!hasSeenTour && userCanVote) {
       setIsTourOpen(true);
     }
   }, []);
@@ -125,7 +121,7 @@ const Category = ({ id, name, nominations, index }) => {
         width="100%"
       >
         <Header id={id} title={name} />
-        {canVote() && (
+        {userCanVote && (
           <Typography
             variant="h6"
             sx={{
@@ -155,6 +151,10 @@ const Category = ({ id, name, nominations, index }) => {
               sx={{
                 height: "auto",
                 width: !isSmallScreen ? "300px" : "auto",
+                marginRight:
+                  itemsToShow.length === 1 && !isSmallScreen
+                    ? "300px"
+                    : "inherit",
               }}
             >
               <CarouselItem
