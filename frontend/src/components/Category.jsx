@@ -18,6 +18,7 @@ import {
   usePostVoteMutation,
 } from "@/state/api";
 import Tour from "reactour";
+import { canVote } from "@/utils/utils";
 
 const Category = ({ id, name, nominations, index }) => {
   const theme = useTheme();
@@ -117,22 +118,29 @@ const Category = ({ id, name, nominations, index }) => {
           className="custom-tour"
         />
       )}
-      <Box display="flex" alignItems="center" marginBottom="0.5rem" width="100%">
+      <Box
+        display="flex"
+        alignItems="center"
+        marginBottom="0.5rem"
+        width="100%"
+      >
         <Header id={id} title={name} />
-        <Typography
-          variant="h6"
-          sx={{
-            marginLeft: "auto",
-            color:
-              votes.length === 0
-                ? "red"
-                : votes.length === 3
-                ? "green"
-                : "orange",
-          }}
-        >
-          {votes.length}/3
-        </Typography>
+        {canVote() && (
+          <Typography
+            variant="h6"
+            sx={{
+              marginLeft: "auto",
+              color:
+                votes.length === 0
+                  ? "red"
+                  : votes.length === 3
+                  ? "green"
+                  : "orange",
+            }}
+          >
+            {votes.length}/3
+          </Typography>
+        )}
       </Box>
       <Box width="100%">
         <Grid container spacing={2} width="100%">
