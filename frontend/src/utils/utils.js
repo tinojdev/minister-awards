@@ -55,3 +55,11 @@ export function canVote() {
 
   return true;
 }
+
+export function isVotingOver() {
+  const now = new Date();
+  if (now > endDate) {
+    return true;
+  }
+  return false;
+}

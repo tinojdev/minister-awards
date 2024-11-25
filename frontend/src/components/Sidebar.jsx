@@ -16,6 +16,7 @@ import { ChevronRightOutlined, ChevronLeft } from "@mui/icons-material";
 import MryLogo from "@/assets/awards.png";
 import { Link } from "react-router-dom";
 import { Instagram } from "@mui/icons-material";
+import { isVotingOver } from "@/utils/utils";
 
 const Sidebar = ({
   drawerWidth,
@@ -88,35 +89,37 @@ const Sidebar = ({
                     primaryTypographyProps={{
                       style: { fontSize: "20px", fontWeight: "bold" },
                     }}
-                    sx={{ml: "1rem"}}
+                    sx={{ ml: "1rem" }}
                   />
                   {pathname === "/home" && (
                     <ChevronRightOutlined sx={{ ml: "auto" }} />
                   )}
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() => handleNavigation("leaderboard")}
-                  sx={{
-                    color:
-                      pathname === "/leaderboard"
-                        ? theme.palette.secondary[500]
-                        : theme.palette.primary[1000],
-                  }}
-                >
-                  <ListItemText
-                    primary="Tulostaulu"
-                    primaryTypographyProps={{
-                      style: { fontSize: "20px", fontWeight: "bold" },
+              {isVotingOver() && (
+                <ListItem disablePadding>
+                  <ListItemButton
+                    onClick={() => handleNavigation("leaderboard")}
+                    sx={{
+                      color:
+                        pathname === "/leaderboard"
+                          ? theme.palette.secondary[500]
+                          : theme.palette.primary[1000],
                     }}
-                    sx={{ml: "1rem"}}
-                  />
-                  {pathname === "/leaderboard" && (
-                    <ChevronRightOutlined sx={{ ml: "auto" }} />
-                  )}
-                </ListItemButton>
-              </ListItem>
+                  >
+                    <ListItemText
+                      primary="Tulostaulu"
+                      primaryTypographyProps={{
+                        style: { fontSize: "20px", fontWeight: "bold" },
+                      }}
+                      sx={{ ml: "1rem" }}
+                    />
+                    {pathname === "/leaderboard" && (
+                      <ChevronRightOutlined sx={{ ml: "auto" }} />
+                    )}
+                  </ListItemButton>
+                </ListItem>
+              )}
             </List>
             <Box
               position="absolute"
