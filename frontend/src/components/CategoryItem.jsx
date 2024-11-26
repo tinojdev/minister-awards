@@ -170,13 +170,39 @@ const CarouselItem = ({
             left: "50%",
             transform: "translate(-50%, -50%)",
             maxWidth: "70vw",
-            maxHeight: "50vh",
             backgroundColor: "transparent",
+            overflow: "hidden",
           }}
         >
+          {/* Background Video */}
+          {mediaSrc.endsWith(".mp4") && (
+            <video
+              onLoadedData={handleMediaLoad}
+              autoPlay
+              loop
+              muted
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+                maxHeight: "50vh",
+                maxWidth: "80vw",
+                filter: "blur(10px)",
+                zIndex: -1,
+              }}
+            >
+              <source src={mediaSrc} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          )}
+
           {loading && (
             <CircularProgress sx={{ color: theme.palette.secondary[400] }} />
           )}
+
           {mediaSrc.endsWith(".mp4") ? (
             <video
               autoPlay
@@ -184,13 +210,13 @@ const CarouselItem = ({
               loop
               onLoadedData={handleMediaLoad}
               style={{
-                display: loading ? "none" : "block", // Hide until loaded
+                display: loading ? "none" : "block",
                 width: "100%",
                 height: "auto",
                 minWidth: isXsmallScreen ? "70vw" : "30vw",
-                maxHeight: "70vh",
-                maxWidth: "70vw",
-                objectFit: "fill",
+                maxHeight: "50vh",
+                maxWidth: "80vw",
+                objectFit: "contain",
               }}
             >
               <source src={mediaSrc} type="video/mp4" />
@@ -202,7 +228,7 @@ const CarouselItem = ({
               alt="Media"
               onLoad={handleMediaLoad}
               style={{
-                display: loading ? "none" : "block", // Hide until loaded
+                display: loading ? "none" : "block",
                 width: "100%",
                 height: "auto",
                 minWidth: isXsmallScreen ? "70vw" : "30vw",
@@ -212,6 +238,7 @@ const CarouselItem = ({
               }}
             />
           )}
+
           {!loading && (
             <IconButton
               onClick={handleClose}
@@ -230,6 +257,7 @@ const CarouselItem = ({
               <CloseIcon sx={{ color: theme.palette.primary[1000] }} />
             </IconButton>
           )}
+
           <Box
             sx={{
               backgroundColor: theme.palette.primary[50],
