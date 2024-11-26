@@ -179,6 +179,7 @@ const CarouselItem = ({
             <video
               onLoadedData={handleMediaLoad}
               autoPlay
+              playsInline
               loop
               muted
               style={{
@@ -206,8 +207,8 @@ const CarouselItem = ({
           {mediaSrc.endsWith(".mp4") ? (
             <video
               autoPlay
-              playsInline
               loop
+              playsInline
               onLoadedData={handleMediaLoad}
               style={{
                 display: loading ? "none" : "block",
