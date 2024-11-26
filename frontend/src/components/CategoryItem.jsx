@@ -172,6 +172,7 @@ const CarouselItem = ({
             maxWidth: "70vw",
             backgroundColor: "transparent",
             overflow: "hidden",
+            minWidth: isXsmallScreen ? "70vw" : "30vw",
           }}
         >
           {/* Background Video */}
