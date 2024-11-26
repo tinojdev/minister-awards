@@ -172,11 +172,11 @@ const CarouselItem = ({
             maxWidth: "70vw",
             backgroundColor: "transparent",
             overflow: "hidden",
-            minWidth: isXsmallScreen ? "70vw" : "30vw",
+            minWidth: isXsmallScreen ? "70vw" : "45vw",
           }}
         >
           {/* Background Video */}
-          {mediaSrc.endsWith(".mp4") && (
+          {(mediaSrc.endsWith(".mp4") && !loading) && (
             <video
               onLoadedData={handleMediaLoad}
               autoPlay
@@ -202,7 +202,17 @@ const CarouselItem = ({
           )}
 
           {loading && (
-            <CircularProgress sx={{ color: theme.palette.secondary[400] }} />
+            <Box
+              sx={{
+                backgroundColor: alpha(theme.palette.primary[1000], 0.5),
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "50vh",
+              }}
+            >
+              <CircularProgress sx={{ color: theme.palette.secondary[400] }} />
+            </Box>
           )}
 
           {mediaSrc.endsWith(".mp4") ? (
