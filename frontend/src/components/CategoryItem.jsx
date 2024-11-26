@@ -86,6 +86,7 @@ const CarouselItem = ({
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             "&:hover": {
               transform: "scale(1.10)",
+              cursor: "pointer",
             },
           }}
           src={mediaSrcThumbnail}
@@ -97,6 +98,7 @@ const CarouselItem = ({
           data-tour={index === 0 ? "media-0" : undefined}
         />
         <CardContent
+          onClick={handleOpen}
           sx={{
             flexGrow: 1,
             height: "100%",
@@ -105,6 +107,9 @@ const CarouselItem = ({
             justifyContent: "center",
             flexDirection: "column",
             maxWidth: "55%",
+            "&:hover": {
+              cursor: "pointer",
+            },
           }}
         >
           <Typography
@@ -225,6 +230,16 @@ const CarouselItem = ({
               <CloseIcon sx={{ color: theme.palette.primary[1000] }} />
             </IconButton>
           )}
+          <Box
+            sx={{
+              backgroundColor: theme.palette.primary[50],
+              padding: "0.5rem",
+              borderBottomLeftRadius: "5px",
+              borderBottomRightRadius: "5px",
+            }}
+          >
+            <Typography fontWeight="bold">{nomination.title}</Typography>
+          </Box>
         </Box>
       </Modal>
     </Box>
