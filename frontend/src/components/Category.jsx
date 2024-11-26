@@ -21,6 +21,7 @@ import Tour from "reactour";
 import { canVote } from "@/utils/utils";
 
 const Category = ({ id, name, nominations, index }) => {
+  console.log(name, nominations.length, nominations.length === 1)
   const theme = useTheme();
   const [showmore, setShowmore] = useState(false);
   const [votes, setVotes] = useState([]);
@@ -145,15 +146,15 @@ const Category = ({ id, name, nominations, index }) => {
               item
               xs={12}
               sm={12}
-              md={6}
-              lg={6}
+              md={(nominations.length === 1) ? 12 : 6}
+              lg={(nominations.length === 1) ? 12 : 6}
               key={nomination.id}
               sx={{
                 height: "auto",
-                width: !isSmallScreen ? "300px" : "auto",
+                width: nominations.length === 1 && !isSmallScreen ? "100%" : "auto",
                 marginRight:
-                  itemsToShow.length === 1 && !isSmallScreen
-                    ? "300px"
+                  nominations.length === 1 && !isSmallScreen
+                    ? "auto"
                     : "inherit",
               }}
             >
