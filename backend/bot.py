@@ -122,6 +122,10 @@ async def nominate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     replied_to_message = update.message.reply_to_message
 
     if not replied_to_message:
+        await update.message.reply_text(
+            "Et ole vastannut mihinkään viestiin tai vastattu viesti on liian vanha.",
+            quote=True,
+        )
         return -1
 
     if not context.args:
