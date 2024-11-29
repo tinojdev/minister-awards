@@ -172,11 +172,10 @@ const CarouselItem = ({
             maxWidth: "70vw",
             backgroundColor: "transparent",
             overflow: "hidden",
-            minWidth: isXsmallScreen ? "70vw" : "45vw",
           }}
         >
           {/* Background Video */}
-          {(mediaSrc.endsWith(".mp4") && !loading) && (
+          {mediaSrc.endsWith(".mp4") && !loading && (
             <video
               onLoadedData={handleMediaLoad}
               autoPlay
@@ -202,17 +201,7 @@ const CarouselItem = ({
           )}
 
           {loading && (
-            <Box
-              sx={{
-                backgroundColor: alpha(theme.palette.primary[1000], 0.5),
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "50vh",
-              }}
-            >
-              <CircularProgress sx={{ color: theme.palette.secondary[400] }} />
-            </Box>
+            <CircularProgress sx={{ color: theme.palette.secondary[400] }} />
           )}
 
           {mediaSrc.endsWith(".mp4") ? (
@@ -270,16 +259,18 @@ const CarouselItem = ({
             </IconButton>
           )}
 
-          <Box
-            sx={{
-              backgroundColor: theme.palette.primary[50],
-              padding: "0.5rem",
-              borderBottomLeftRadius: "5px",
-              borderBottomRightRadius: "5px",
-            }}
-          >
-            <Typography fontWeight="bold">{nomination.title}</Typography>
-          </Box>
+          {!loading && (
+            <Box
+              sx={{
+                backgroundColor: theme.palette.primary[50],
+                padding: "0.5rem",
+                borderBottomLeftRadius: "5px",
+                borderBottomRightRadius: "5px",
+              }}
+            >
+              <Typography fontWeight="bold">{nomination.title}</Typography>
+            </Box>
+          )}
         </Box>
       </Modal>
     </Box>
