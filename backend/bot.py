@@ -229,7 +229,14 @@ async def nominee_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         video_file = File(io.BytesIO(byte_arr), name="submission.mp4")
     elif message.video:
         video = message.video
-        video_file = await video.get_file()
+        try:
+            video_file = await video.get_file()
+        except Exception as e:
+            await query.edit_message_text(
+                "Videon lataaminen epäonnistui, tiedosto liian suuri (max 20mb).",
+                reply_markup=None,
+            )
+            return -1
         byte_arr = await video_file.download_as_bytearray()
         video_file = File(io.BytesIO(byte_arr), name="submission.mp4")
     else:
